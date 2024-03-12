@@ -1,3 +1,16 @@
+.PHONY: start-and-migrate
+start-and-migrate: stop-and-delete networkcreate postgres-image postgres wait-for-postgres createdb migrateup
+
+.PHONY: stop-and-delete
+stop-and-delete:
+	-docker stop postgres16
+	-docker rm postgres16
+	-docker network rm playlist-network
+
+.PHONY: networkcreate
+networkcreate:
+	-docker network create playlist-network
+
 .PHONY: postgres-image
 postgres-image:
 	docker pull postgres:16-alpine
@@ -14,9 +27,13 @@ createdb: wait-for-postgres
 sqlc:
 	sqlc generate
 
-.PHONY: sqlc
-sqlc:
-	sqlc generate
+.PHONY: server
+server:
+	go run main.go
+
+.PHONY: migrateup
+migrateup:
+	migrate -path database/schema -database "postgresql://postgres:password@127.0.0.1:5433/foodpanda-playlist?sslmode=disable" -verbose up
 
 wait-for-postgres:
 	sleep 5  # wait time to run make createdb
