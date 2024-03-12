@@ -5,34 +5,34 @@
 package db
 
 import (
-	"database/sql"
+	null "gopkg.in/guregu/null.v4"
 )
 
 // Stores cuisine
 type Cuisine struct {
-	ID      int64          `json:"id"`
-	Cuisine sql.NullString `json:"cuisine"`
+	ID      int64  `json:"id"`
+	Cuisine string `json:"cuisine"`
 }
 
 // Stores dishes
 type Dish struct {
-	ID           int64          `json:"id"`
-	RestaurantID int64          `json:"restaurant_id"`
-	IsAvailable  bool           `json:"is_available"`
-	Name         string         `json:"name"`
-	Description  sql.NullString `json:"description"`
-	Price        string         `json:"price"`
-	Cuisine      sql.NullString `json:"cuisine"`
-	ImageUrl     sql.NullString `json:"image_url"`
+	ID           int64   `json:"id"`
+	RestaurantID int64   `json:"restaurant_id"`
+	IsAvailable  bool    `json:"is_available"`
+	Name         string  `json:"name"`
+	Description  string  `json:"description"`
+	Price        float64 `json:"price"`
+	Cuisine      string  `json:"cuisine"`
+	ImageUrl     string  `json:"image_url"`
 }
 
 // Stores restaurants
 type Restaurant struct {
-	ID          int64           `json:"id"`
-	Name        string          `json:"name"`
-	Description sql.NullString  `json:"description"`
-	Address     sql.NullString  `json:"address"`
-	Rating      sql.NullFloat64 `json:"rating"`
-	Cuisine     sql.NullString  `json:"cuisine"`
-	ImageUrl    sql.NullString  `json:"image_url"`
+	ID          int64      `json:"id"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Address     string     `json:"address"`
+	Rating      null.Float `json:"rating"`
+	Cuisine     string     `json:"cuisine"`
+	ImageUrl    string     `json:"image_url"`
 }

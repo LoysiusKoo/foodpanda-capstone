@@ -33,7 +33,7 @@ server:
 
 .PHONY: migrateup
 migrateup:
-	migrate -path database/schema -database "postgresql://postgres:password@127.0.0.1:5433/foodpanda-playlist?sslmode=disable" -verbose up
+	migrate -path database/migration -database "postgresql://postgres:password@127.0.0.1:5433/foodpanda-playlist?sslmode=disable" -verbose up
 
 wait-for-postgres:
 	sleep 5  # wait time to run make createdb

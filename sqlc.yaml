@@ -1,6 +1,6 @@
 version: "2"
 sql:
-  - schema: "database/schema/"
+  - schema: "database/migration/"
     queries: "database/queries/"
     engine: "postgresql"
     gen:
@@ -10,37 +10,35 @@ sql:
         emit_json_tags: true
         emit_interface: true
         emit_empty_slices: true
-# version: "2"
-# packages:
-#   - name: "database"
-#     path: "./database/sqlc"
-#     queries: "./database/queries/"
-#     schema: "./database/schema/"
-#     engine: "postgresql"
-
-#     emit_json_tags: true
-#     emit_prepared_queries: false
-#     emit_interface: true
-#     emit_exact_table_names: false
-#     emit_empty_slices: true
-# overrides:
-#   - db_type: pg_catalog.varchar
-#     nullable: true
-#     go_type:
-#       import: "gopkg.in/guregu/null.v4"
-#       package: "null"
-#       type: "String"
-#   - db_type: pg_catalog.bool
-#     nullable: true
-#     go_type:
-#       import: "gopkg.in/guregu/null.v4"
-#       package: "null"
-#       type: "Bool"
-#   - db_type: pg_catalog.time
-#     nullable: true
-#     go_type:
-#       import: "gopkg.in/guregu/null.v4"
-#       package: "null"
-#       type: "Time"
-#   - db_type: pg_catalog.numeric
-#     go_type: float64
+        emit_prepared_queries: false
+        emit_exact_table_names: false
+        overrides:
+          - db_type: pg_catalog.varchar
+            go_type: string
+            nullable: true
+          - db_type: pg_catalog.varchar
+            nullable: true
+            go_type:
+              import: "gopkg.in/guregu/null.v4"
+              package: "null"
+              type: "String"
+          - db_type: pg_catalog.bool
+            nullable: true
+            go_type:
+              import: "gopkg.in/guregu/null.v4"
+              package: "null"
+              type: "Bool"
+          - db_type: pg_catalog.float8
+            nullable: true
+            go_type:
+              import: "gopkg.in/guregu/null.v4"
+              package: "null"
+              type: "Float"
+          - db_type: pg_catalog.time
+            nullable: true
+            go_type:
+              import: "gopkg.in/guregu/null.v4"
+              package: "null"
+              type: "Time"
+          - db_type: pg_catalog.numeric
+            go_type: float64

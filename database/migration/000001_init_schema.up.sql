@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS "restaurants" (
+CREATE TABLE "restaurants" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
   "description" varchar,
@@ -33,5 +33,3 @@ COMMENT ON TABLE "cuisine" IS 'Stores cuisine';
 
 
 ALTER TABLE "dishes" ADD FOREIGN KEY ("restaurant_id") REFERENCES "restaurants" ("id");
-
-ALTER TABLE "cuisine" ADD FOREIGN KEY ("cuisine") REFERENCES "dishes" ("cuisine");

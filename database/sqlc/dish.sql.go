@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const createDish = `-- name: CreateDish :one
@@ -28,13 +27,13 @@ RETURNING id, restaurant_id, is_available, name, description, price, cuisine, im
 `
 
 type CreateDishParams struct {
-	RestaurantID int64          `json:"restaurant_id"`
-	IsAvailable  bool           `json:"is_available"`
-	Name         string         `json:"name"`
-	Description  sql.NullString `json:"description"`
-	Price        string         `json:"price"`
-	Cuisine      sql.NullString `json:"cuisine"`
-	ImageUrl     sql.NullString `json:"image_url"`
+	RestaurantID int64   `json:"restaurant_id"`
+	IsAvailable  bool    `json:"is_available"`
+	Name         string  `json:"name"`
+	Description  string  `json:"description"`
+	Price        float64 `json:"price"`
+	Cuisine      string  `json:"cuisine"`
+	ImageUrl     string  `json:"image_url"`
 }
 
 func (q *Queries) CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error) {
@@ -154,14 +153,14 @@ RETURNING id, restaurant_id, is_available, name, description, price, cuisine, im
 `
 
 type UpdateDishParams struct {
-	ID           int64          `json:"id"`
-	RestaurantID int64          `json:"restaurant_id"`
-	IsAvailable  bool           `json:"is_available"`
-	Name         string         `json:"name"`
-	Description  sql.NullString `json:"description"`
-	Price        string         `json:"price"`
-	Cuisine      sql.NullString `json:"cuisine"`
-	ImageUrl     sql.NullString `json:"image_url"`
+	ID           int64   `json:"id"`
+	RestaurantID int64   `json:"restaurant_id"`
+	IsAvailable  bool    `json:"is_available"`
+	Name         string  `json:"name"`
+	Description  string  `json:"description"`
+	Price        float64 `json:"price"`
+	Cuisine      string  `json:"cuisine"`
+	ImageUrl     string  `json:"image_url"`
 }
 
 func (q *Queries) UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error) {

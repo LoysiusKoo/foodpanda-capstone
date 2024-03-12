@@ -7,7 +7,8 @@ package db
 
 import (
 	"context"
-	"database/sql"
+
+	null "gopkg.in/guregu/null.v4"
 )
 
 const createRestaurant = `-- name: CreateRestaurant :one
@@ -26,12 +27,12 @@ RETURNING id, name, description, address, rating, cuisine, image_url
 `
 
 type CreateRestaurantParams struct {
-	Name        string          `json:"name"`
-	Description sql.NullString  `json:"description"`
-	Address     sql.NullString  `json:"address"`
-	Rating      sql.NullFloat64 `json:"rating"`
-	Cuisine     sql.NullString  `json:"cuisine"`
-	ImageUrl    sql.NullString  `json:"image_url"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Address     string     `json:"address"`
+	Rating      null.Float `json:"rating"`
+	Cuisine     string     `json:"cuisine"`
+	ImageUrl    string     `json:"image_url"`
 }
 
 func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error) {
@@ -146,13 +147,13 @@ RETURNING id, name, description, address, rating, cuisine, image_url
 `
 
 type UpdateRestaurantParams struct {
-	ID          int64           `json:"id"`
-	Name        string          `json:"name"`
-	Description sql.NullString  `json:"description"`
-	Address     sql.NullString  `json:"address"`
-	Rating      sql.NullFloat64 `json:"rating"`
-	Cuisine     sql.NullString  `json:"cuisine"`
-	ImageUrl    sql.NullString  `json:"image_url"`
+	ID          int64      `json:"id"`
+	Name        string     `json:"name"`
+	Description string     `json:"description"`
+	Address     string     `json:"address"`
+	Rating      null.Float `json:"rating"`
+	Cuisine     string     `json:"cuisine"`
+	ImageUrl    string     `json:"image_url"`
 }
 
 func (q *Queries) UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error) {
