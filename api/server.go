@@ -23,21 +23,7 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 
 	// add routes to router
-	router.POST("/users", server.createUser)
-	router.POST("/playlists", server.createPlaylist)
-	router.GET("/playlists/:playlistid", server.getPlaylist)
-	router.GET("/playlists", server.listPlaylist)
-	router.GET("/playlists/current/:playlistid", server.getPlaylistCurrent)
-	router.GET("/playlists-latest", server.getPlaylistLatest)
-	router.GET("/playlists-category", server.getPlaylistCategory)
-	router.GET("/publicplaylists", server.getPublicPlaylist)
-	router.GET("/userplaylists/:userid", server.getUserPlaylist)
-
-	router.POST("/playlist/:userid/:playlistid", server.updateUserPlaylistStatus) // This post request is just to update the status to Pending for testing purpose.
-	router.PUT("/playlist/:userid/:playlistid", server.updateUserPlaylistStatus)
-
-	router.GET("/playlists-latestv2", server.getPlaylistLatestV2)
-	router.GET("/playlists-user", server.getPlaylistUser)
+	router.GET("/restaurants/:restaurantid", server.getRestaurant)
 
 	server.router = router
 }

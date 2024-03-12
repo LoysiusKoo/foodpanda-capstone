@@ -6,7 +6,6 @@ require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.18.2
-	gopkg.in/guregu/null.v4 v4.0.0
 )
 
 require (

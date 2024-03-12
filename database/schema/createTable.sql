@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "restaurants" (
   "name" varchar NOT NULL,
   "description" varchar,
   "address" varchar,
-  "rating" varchar,
+  "rating" float,
   "cuisine" varchar,
   "image_url" varchar
 );
@@ -21,7 +21,7 @@ CREATE TABLE "dishes" (
 
 CREATE TABLE "cuisine" (
   "id" bigserial PRIMARY KEY,
-  "cuisine" varchar,
+  "cuisine" varchar
 );
 
 
