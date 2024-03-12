@@ -18,6 +18,15 @@ RETURNING *;
 SELECT * FROM dishes
 WHERE id = $1 LIMIT 1;
 
+-- name: GetDishesByCuisine :many
+SELECT * FROM dishes
+WHERE cuisine LIKE $1
+ORDER BY id;
+
+-- name: GetDishes :many
+SELECT * FROM dishes
+ORDER BY id;
+
 -- name: ListDishes :many
 SELECT * FROM dishes
 WHERE id = $1

@@ -7,17 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type getRestaurantsRequest struct {
+type getDishesRequest struct {
 }
 
-func (server *Server) getRestaurants(ctx *gin.Context) {
-	var req getRestaurantsRequest
+func (server *Server) getDishes(ctx *gin.Context) {
+	var req getDishesRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errResponse(err))
 		return
 	}
 
-	restaurants, err := server.store.GetRestaurants(ctx)
+	dishes, err := server.store.GetDishes(ctx)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errResponse(err))
@@ -28,21 +28,21 @@ func (server *Server) getRestaurants(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, restaurants)
+	ctx.JSON(http.StatusOK, dishes)
 }
 
-type getRestaurantByIDRequest struct {
-	ID int64 `uri:"restaurantid" binding:"required,min=1"`
+type getDishesByCuisineRequest struct {
+	cuisine sql.NullString `uri:"cuisinename"`
 }
 
-func (server *Server) getRestaurantByID(ctx *gin.Context) {
-	var req getRestaurantByIDRequest
+func (server *Server) getDishesByCuisine(ctx *gin.Context) {
+	var req getDishesByCuisineRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errResponse(err))
 		return
 	}
 
-	restaurant, err := server.store.GetRestaurantByID(ctx, req.ID)
+	dishes, err := server.store.GetDishesByCuisine(ctx, req.cuisine)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errResponse(err))
@@ -53,5 +53,5 @@ func (server *Server) getRestaurantByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, restaurant)
+	ctx.JSON(http.StatusOK, dishes)
 }

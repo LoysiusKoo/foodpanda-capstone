@@ -5,6 +5,8 @@
 package db
 
 import (
+	"database/sql"
+
 	null "gopkg.in/guregu/null.v4"
 )
 
@@ -16,14 +18,14 @@ type Cuisine struct {
 
 // Stores dishes
 type Dish struct {
-	ID           int64   `json:"id"`
-	RestaurantID int64   `json:"restaurant_id"`
-	IsAvailable  bool    `json:"is_available"`
-	Name         string  `json:"name"`
-	Description  string  `json:"description"`
-	Price        float64 `json:"price"`
-	Cuisine      string  `json:"cuisine"`
-	ImageUrl     string  `json:"image_url"`
+	ID           int64          `json:"id"`
+	RestaurantID int64          `json:"restaurant_id"`
+	IsAvailable  bool           `json:"is_available"`
+	Name         string         `json:"name"`
+	Description  string         `json:"description"`
+	Price        float64        `json:"price"`
+	Cuisine      sql.NullString `json:"cuisine"`
+	ImageUrl     string         `json:"image_url"`
 }
 
 // Stores restaurants

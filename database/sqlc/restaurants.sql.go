@@ -67,13 +67,13 @@ func (q *Queries) DeleteRestaurant(ctx context.Context, id int64) error {
 	return err
 }
 
-const getRestaurant = `-- name: GetRestaurant :one
+const getRestaurantByID = `-- name: GetRestaurantByID :one
 SELECT id, name, description, address, rating, cuisine, image_url FROM restaurants
 WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetRestaurant(ctx context.Context, id int64) (Restaurant, error) {
-	row := q.db.QueryRowContext(ctx, getRestaurant, id)
+func (q *Queries) GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error) {
+	row := q.db.QueryRowContext(ctx, getRestaurantByID, id)
 	var i Restaurant
 	err := row.Scan(
 		&i.ID,
@@ -85,6 +85,42 @@ func (q *Queries) GetRestaurant(ctx context.Context, id int64) (Restaurant, erro
 		&i.ImageUrl,
 	)
 	return i, err
+}
+
+const getRestaurants = `-- name: GetRestaurants :many
+SELECT id, name, description, address, rating, cuisine, image_url FROM restaurants
+ORDER BY id
+`
+
+func (q *Queries) GetRestaurants(ctx context.Context) ([]Restaurant, error) {
+	rows, err := q.db.QueryContext(ctx, getRestaurants)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Restaurant{}
+	for rows.Next() {
+		var i Restaurant
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Description,
+			&i.Address,
+			&i.Rating,
+			&i.Cuisine,
+			&i.ImageUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const listRestaurants = `-- name: ListRestaurants :many

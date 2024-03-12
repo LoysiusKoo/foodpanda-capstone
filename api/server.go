@@ -23,7 +23,10 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 
 	// add routes to router
-	router.GET("/restaurants/:restaurantid", server.getRestaurant)
+	router.GET("/restaurants", server.getRestaurants)
+	router.GET("/restaurants/:restaurantid", server.getRestaurantByID)
+	router.GET("/dishes", server.getDishes)
+	router.GET("/dishesbycuisine/:cuisinename", server.getDishesByCuisine)
 
 	server.router = router
 }

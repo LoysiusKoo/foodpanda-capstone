@@ -22,7 +22,7 @@ INSERT INTO dishes (restaurant_id, is_available, name, description, price, cuisi
 VALUES
 
   -- Chicken Rice Express
-  (1, true, 'Hainanese Chicken Rice', 'Classic Hainanese chicken with fragrant rice', 5.50, 'Chicken', 'chicken_rice_image_url_1'),
+  (1, true, 'Hainanese Chicken Rice', 'Classic Hainanese chicken with fragrant rice', 5.50, '{"Chicken", "Rice"}', 'chicken_rice_image_url_1'),
   (1, true, 'Roast Chicken Noodles', 'Roasted chicken served with noodles', 6.50, 'Chicken', 'chicken_rice_image_url_2'),
   (1, true, 'Chicken Satay Rice', 'Hainanese-style chicken rice with chicken satay', 8.50, 'Chicken', 'chicken_rice_image_url_3'),
   (1, true, 'Spicy Chicken Noodles', 'Spicy chicken noodles with a kick', 7.00, 'Chicken', 'chicken_rice_image_url_4'),

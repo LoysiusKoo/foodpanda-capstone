@@ -12,7 +12,11 @@ VALUES (
 )
 RETURNING *;
 
--- name: GetRestaurant :one
+-- name: GetRestaurants :many
+SELECT * FROM restaurants
+ORDER BY id;
+
+-- name: GetRestaurantByID :one
 SELECT * FROM restaurants
 WHERE id = $1 LIMIT 1;
 

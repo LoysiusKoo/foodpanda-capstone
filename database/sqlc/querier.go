@@ -6,6 +6,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 type Querier interface {
@@ -14,7 +15,10 @@ type Querier interface {
 	DeleteDish(ctx context.Context, id int64) error
 	DeleteRestaurant(ctx context.Context, id int64) error
 	GetDish(ctx context.Context, id int64) (Dish, error)
-	GetRestaurant(ctx context.Context, id int64) (Restaurant, error)
+	GetDishes(ctx context.Context) ([]Dish, error)
+	GetDishesByCuisine(ctx context.Context, cuisine sql.NullString) ([]Dish, error)
+	GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error)
+	GetRestaurants(ctx context.Context) ([]Restaurant, error)
 	ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
 	UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error)

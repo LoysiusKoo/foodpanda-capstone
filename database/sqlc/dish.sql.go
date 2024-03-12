@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 )
 
 const createDish = `-- name: CreateDish :one
@@ -27,13 +28,13 @@ RETURNING id, restaurant_id, is_available, name, description, price, cuisine, im
 `
 
 type CreateDishParams struct {
-	RestaurantID int64   `json:"restaurant_id"`
-	IsAvailable  bool    `json:"is_available"`
-	Name         string  `json:"name"`
-	Description  string  `json:"description"`
-	Price        float64 `json:"price"`
-	Cuisine      string  `json:"cuisine"`
-	ImageUrl     string  `json:"image_url"`
+	RestaurantID int64          `json:"restaurant_id"`
+	IsAvailable  bool           `json:"is_available"`
+	Name         string         `json:"name"`
+	Description  string         `json:"description"`
+	Price        float64        `json:"price"`
+	Cuisine      sql.NullString `json:"cuisine"`
+	ImageUrl     string         `json:"image_url"`
 }
 
 func (q *Queries) CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error) {
@@ -89,6 +90,81 @@ func (q *Queries) GetDish(ctx context.Context, id int64) (Dish, error) {
 		&i.ImageUrl,
 	)
 	return i, err
+}
+
+const getDishes = `-- name: GetDishes :many
+SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
+ORDER BY id
+`
+
+func (q *Queries) GetDishes(ctx context.Context) ([]Dish, error) {
+	rows, err := q.db.QueryContext(ctx, getDishes)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Dish{}
+	for rows.Next() {
+		var i Dish
+		if err := rows.Scan(
+			&i.ID,
+			&i.RestaurantID,
+			&i.IsAvailable,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+			&i.Cuisine,
+			&i.ImageUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getDishesByCuisine = `-- name: GetDishesByCuisine :many
+SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
+WHERE cuisine LIKE $1
+ORDER BY id
+`
+
+func (q *Queries) GetDishesByCuisine(ctx context.Context, cuisine sql.NullString) ([]Dish, error) {
+	rows, err := q.db.QueryContext(ctx, getDishesByCuisine, cuisine)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Dish{}
+	for rows.Next() {
+		var i Dish
+		if err := rows.Scan(
+			&i.ID,
+			&i.RestaurantID,
+			&i.IsAvailable,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+			&i.Cuisine,
+			&i.ImageUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const listDishes = `-- name: ListDishes :many
@@ -153,14 +229,14 @@ RETURNING id, restaurant_id, is_available, name, description, price, cuisine, im
 `
 
 type UpdateDishParams struct {
-	ID           int64   `json:"id"`
-	RestaurantID int64   `json:"restaurant_id"`
-	IsAvailable  bool    `json:"is_available"`
-	Name         string  `json:"name"`
-	Description  string  `json:"description"`
-	Price        float64 `json:"price"`
-	Cuisine      string  `json:"cuisine"`
-	ImageUrl     string  `json:"image_url"`
+	ID           int64          `json:"id"`
+	RestaurantID int64          `json:"restaurant_id"`
+	IsAvailable  bool           `json:"is_available"`
+	Name         string         `json:"name"`
+	Description  string         `json:"description"`
+	Price        float64        `json:"price"`
+	Cuisine      sql.NullString `json:"cuisine"`
+	ImageUrl     string         `json:"image_url"`
 }
 
 func (q *Queries) UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error) {
