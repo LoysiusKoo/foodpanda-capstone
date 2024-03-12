@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/jichong-tay/foodpanda-playlist-api/api"
+	"github.com/loysiuskoo/foodpanda-capstone/api"
 	db "github.com/loysiuskoo/foodpanda-capstone/database/sqlc"
 
 	_ "github.com/lib/pq"

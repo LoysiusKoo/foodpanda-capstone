@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	db "github.com/jichong-tay/foodpanda-playlist-api/db/sqlc"
+	db "github.com/loysiuskoo/foodpanda-capstone/database/sqlc"
 )
 
 // Server will serves HTTP requests
