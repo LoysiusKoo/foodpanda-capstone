@@ -5,8 +5,10 @@ import (
 	"log"
 
 	"github.com/jichong-tay/foodpanda-playlist-api/api"
-	db "github.com/jichong-tay/foodpanda-playlist-api/db/sqlc"
+	db "github.com/loysiuskoo/foodpanda-capstone/database/sqlc"
+
 	_ "github.com/lib/pq"
+	"github.com/loysiuskoo/foodpanda-capstone/util"
 )
 
 func main() {

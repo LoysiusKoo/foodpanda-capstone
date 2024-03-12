@@ -1,4 +1,4 @@
-CREATE TABLE "restaurants" (
+CREATE TABLE IF NOT EXISTS "restaurants" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
   "description" varchar,
