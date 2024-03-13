@@ -14,9 +14,6 @@ sql:
         emit_exact_table_names: false
         overrides:
           - db_type: pg_catalog.varchar
-            go_type: string
-            nullable: true
-          - db_type: pg_catalog.varchar
             nullable: true
             go_type:
               import: "gopkg.in/guregu/null.v4"

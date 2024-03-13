@@ -8,6 +8,8 @@ package db
 import (
 	"context"
 	"database/sql"
+
+	null "gopkg.in/guregu/null.v4"
 )
 
 const createDish = `-- name: CreateDish :one
@@ -28,13 +30,13 @@ RETURNING id, restaurant_id, is_available, name, description, price, cuisine, im
 `
 
 type CreateDishParams struct {
-	RestaurantID int64          `json:"restaurant_id"`
-	IsAvailable  bool           `json:"is_available"`
-	Name         string         `json:"name"`
-	Description  string         `json:"description"`
-	Price        float64        `json:"price"`
-	Cuisine      sql.NullString `json:"cuisine"`
-	ImageUrl     string         `json:"image_url"`
+	RestaurantID int64       `json:"restaurant_id"`
+	IsAvailable  bool        `json:"is_available"`
+	Name         string      `json:"name"`
+	Description  null.String `json:"description"`
+	Price        float64     `json:"price"`
+	Cuisine      null.String `json:"cuisine"`
+	ImageUrl     null.String `json:"image_url"`
 }
 
 func (q *Queries) CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error) {
@@ -131,12 +133,12 @@ func (q *Queries) GetDishes(ctx context.Context) ([]Dish, error) {
 
 const getDishesByCuisine = `-- name: GetDishesByCuisine :many
 SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
-WHERE cuisine LIKE $1
+WHERE cuisine ILIKE '%'||$1||'%'
 ORDER BY id
 `
 
-func (q *Queries) GetDishesByCuisine(ctx context.Context, cuisine sql.NullString) ([]Dish, error) {
-	rows, err := q.db.QueryContext(ctx, getDishesByCuisine, cuisine)
+func (q *Queries) GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullString) ([]Dish, error) {
+	rows, err := q.db.QueryContext(ctx, getDishesByCuisine, dollar_1)
 	if err != nil {
 		return nil, err
 	}
@@ -229,14 +231,14 @@ RETURNING id, restaurant_id, is_available, name, description, price, cuisine, im
 `
 
 type UpdateDishParams struct {
-	ID           int64          `json:"id"`
-	RestaurantID int64          `json:"restaurant_id"`
-	IsAvailable  bool           `json:"is_available"`
-	Name         string         `json:"name"`
-	Description  string         `json:"description"`
-	Price        float64        `json:"price"`
-	Cuisine      sql.NullString `json:"cuisine"`
-	ImageUrl     string         `json:"image_url"`
+	ID           int64       `json:"id"`
+	RestaurantID int64       `json:"restaurant_id"`
+	IsAvailable  bool        `json:"is_available"`
+	Name         string      `json:"name"`
+	Description  null.String `json:"description"`
+	Price        float64     `json:"price"`
+	Cuisine      null.String `json:"cuisine"`
+	ImageUrl     null.String `json:"image_url"`
 }
 
 func (q *Queries) UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error) {

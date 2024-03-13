@@ -27,12 +27,12 @@ RETURNING id, name, description, address, rating, cuisine, image_url
 `
 
 type CreateRestaurantParams struct {
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Address     string     `json:"address"`
-	Rating      null.Float `json:"rating"`
-	Cuisine     string     `json:"cuisine"`
-	ImageUrl    string     `json:"image_url"`
+	Name        string      `json:"name"`
+	Description null.String `json:"description"`
+	Address     null.String `json:"address"`
+	Rating      null.Float  `json:"rating"`
+	Cuisine     null.String `json:"cuisine"`
+	ImageUrl    null.String `json:"image_url"`
 }
 
 func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error) {
@@ -183,13 +183,13 @@ RETURNING id, name, description, address, rating, cuisine, image_url
 `
 
 type UpdateRestaurantParams struct {
-	ID          int64      `json:"id"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	Address     string     `json:"address"`
-	Rating      null.Float `json:"rating"`
-	Cuisine     string     `json:"cuisine"`
-	ImageUrl    string     `json:"image_url"`
+	ID          int64       `json:"id"`
+	Name        string      `json:"name"`
+	Description null.String `json:"description"`
+	Address     null.String `json:"address"`
+	Rating      null.Float  `json:"rating"`
+	Cuisine     null.String `json:"cuisine"`
+	ImageUrl    null.String `json:"image_url"`
 }
 
 func (q *Queries) UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error) {

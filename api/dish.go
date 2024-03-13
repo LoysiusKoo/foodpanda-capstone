@@ -2,7 +2,9 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,7 +34,7 @@ func (server *Server) getDishes(ctx *gin.Context) {
 }
 
 type getDishesByCuisineRequest struct {
-	cuisine sql.NullString `uri:"cuisinename"`
+	Cuisine string `uri:"cuisinename"`
 }
 
 func (server *Server) getDishesByCuisine(ctx *gin.Context) {
@@ -42,7 +44,11 @@ func (server *Server) getDishesByCuisine(ctx *gin.Context) {
 		return
 	}
 
-	dishes, err := server.store.GetDishesByCuisine(ctx, req.cuisine)
+	keyword := sql.NullString{
+		String: strings.ToLower(req.Cuisine),
+		Valid:  true}
+
+	dishes, err := server.store.GetDishesByCuisine(ctx, keyword)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errResponse(err))
@@ -54,4 +60,5 @@ func (server *Server) getDishesByCuisine(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, dishes)
+	fmt.Println(req)
 }
