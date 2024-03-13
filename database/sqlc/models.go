@@ -5,6 +5,8 @@
 package db
 
 import (
+	"time"
+
 	null "gopkg.in/guregu/null.v4"
 )
 
@@ -24,6 +26,16 @@ type Dish struct {
 	Price        float64     `json:"price"`
 	Cuisine      null.String `json:"cuisine"`
 	ImageUrl     null.String `json:"image_url"`
+}
+
+// Stores user playlist
+type Playlist struct {
+	ID        int64       `json:"id"`
+	Name      string      `json:"name"`
+	Image     null.String `json:"image"`
+	FoodItems null.String `json:"food_items"`
+	IsActive  bool        `json:"is_active"`
+	CreatedOn time.Time   `json:"created_on"`
 }
 
 // Stores restaurants
