@@ -32,7 +32,7 @@ type CreateRestaurantParams struct {
 	Name           string        `json:"name"`
 	Description    null.String   `json:"description"`
 	Address        null.String   `json:"address"`
-	Rating         null.Float    `json:"rating"`
+	Rating         float64       `json:"rating"`
 	RestaurantType null.String   `json:"restaurant_type"`
 	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
 	ImageUrl       null.String   `json:"image_url"`
@@ -196,7 +196,7 @@ type UpdateRestaurantParams struct {
 	Name           string        `json:"name"`
 	Description    null.String   `json:"description"`
 	Address        null.String   `json:"address"`
-	Rating         null.Float    `json:"rating"`
+	Rating         float64       `json:"rating"`
 	RestaurantType null.String   `json:"restaurant_type"`
 	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
 	ImageUrl       null.String   `json:"image_url"`

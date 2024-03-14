@@ -25,19 +25,19 @@ type Dish struct {
 	Name         string      `json:"name"`
 	Description  null.String `json:"description"`
 	Price        float64     `json:"price"`
-	DietType     null.String `json:"diet_type"`
-	Cuisine      null.String `json:"cuisine"`
-	ImageUrl     null.String `json:"image_url"`
+	DietType     string      `json:"diet_type"`
+	Cuisine      string      `json:"cuisine"`
+	ImageUrl     string      `json:"image_url"`
 }
 
 // Stores user playlist
 type Playlist struct {
-	ID        int64       `json:"id"`
-	Name      string      `json:"name"`
-	Image     null.String `json:"image"`
-	FoodItems null.String `json:"food_items"`
-	IsActive  bool        `json:"is_active"`
-	CreatedOn time.Time   `json:"created_on"`
+	ID        int64     `json:"id"`
+	Name      string    `json:"name"`
+	Image     string    `json:"image"`
+	FoodItems string    `json:"food_items"`
+	IsActive  bool      `json:"is_active"`
+	CreatedOn time.Time `json:"created_on"`
 }
 
 // Stores restaurants
@@ -46,7 +46,7 @@ type Restaurant struct {
 	Name           string        `json:"name"`
 	Description    null.String   `json:"description"`
 	Address        null.String   `json:"address"`
-	Rating         null.Float    `json:"rating"`
+	Rating         float64       `json:"rating"`
 	RestaurantType null.String   `json:"restaurant_type"`
 	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
 	ImageUrl       null.String   `json:"image_url"`

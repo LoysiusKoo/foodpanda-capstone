@@ -35,8 +35,8 @@ type CreateDishParams struct {
 	Name         string      `json:"name"`
 	Description  null.String `json:"description"`
 	Price        float64     `json:"price"`
-	Cuisine      null.String `json:"cuisine"`
-	ImageUrl     null.String `json:"image_url"`
+	Cuisine      string      `json:"cuisine"`
+	ImageUrl     string      `json:"image_url"`
 }
 
 func (q *Queries) CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error) {
@@ -72,6 +72,60 @@ WHERE id = $1
 func (q *Queries) DeleteDish(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteDish, id)
 	return err
+}
+
+const getD = `-- name: GetD :many
+SELECT id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url
+FROM dishes
+WHERE cuisine = $1 
+AND diet_type = $2
+AND price BETWEEN $3 AND $4
+ORDER BY id
+`
+
+type GetDParams struct {
+	Cuisine  string  `json:"cuisine"`
+	DietType string  `json:"diet_type"`
+	Price    float64 `json:"price"`
+	Price_2  float64 `json:"price_2"`
+}
+
+func (q *Queries) GetD(ctx context.Context, arg GetDParams) ([]Dish, error) {
+	rows, err := q.db.QueryContext(ctx, getD,
+		arg.Cuisine,
+		arg.DietType,
+		arg.Price,
+		arg.Price_2,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Dish{}
+	for rows.Next() {
+		var i Dish
+		if err := rows.Scan(
+			&i.ID,
+			&i.RestaurantID,
+			&i.IsAvailable,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+			&i.DietType,
+			&i.Cuisine,
+			&i.ImageUrl,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getDish = `-- name: GetDish :one
@@ -174,12 +228,12 @@ func (q *Queries) GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullStrin
 }
 
 const getDishesByParams = `-- name: GetDishesByParams :many
-SELECT d.id, restaurant_id, is_available, d.name, d.description, price, diet_type, cuisine, d.image_url, r.id, r.name, r.description, address, rating, restaurant_type, num_of_reviews, r.image_url 
+SELECT d.restaurant_id, d.name, d.price, d.cuisine, r.name as restaurant_name, r.rating, d.image_url
 FROM dishes d JOIN restaurants r ON d.restaurant_id = r.id
-WHERE cuisine ILIKE '%'||$1||'%' 
-AND type ILIKE '%'||$2||'%' 
-AND price BETWEEN $3 AND $4
-AND rating >= $5
+WHERE d.cuisine ILIKE '%'||$1||'%'
+AND d.diet_type ILIKE '%'||$2||'%'
+AND d.price BETWEEN $3 AND $4
+AND r.rating >= $5
 ORDER BY r.id
 `
 
@@ -188,27 +242,17 @@ type GetDishesByParamsParams struct {
 	Column2 sql.NullString `json:"column_2"`
 	Price   float64        `json:"price"`
 	Price_2 float64        `json:"price_2"`
-	Rating  null.Float     `json:"rating"`
+	Rating  float64        `json:"rating"`
 }
 
 type GetDishesByParamsRow struct {
-	ID             int64         `json:"id"`
-	RestaurantID   int64         `json:"restaurant_id"`
-	IsAvailable    bool          `json:"is_available"`
-	Name           string        `json:"name"`
-	Description    null.String   `json:"description"`
-	Price          float64       `json:"price"`
-	DietType       null.String   `json:"diet_type"`
-	Cuisine        null.String   `json:"cuisine"`
-	ImageUrl       null.String   `json:"image_url"`
-	ID_2           int64         `json:"id_2"`
-	Name_2         string        `json:"name_2"`
-	Description_2  null.String   `json:"description_2"`
-	Address        null.String   `json:"address"`
-	Rating         null.Float    `json:"rating"`
-	RestaurantType null.String   `json:"restaurant_type"`
-	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
-	ImageUrl_2     null.String   `json:"image_url_2"`
+	RestaurantID   int64   `json:"restaurant_id"`
+	Name           string  `json:"name"`
+	Price          float64 `json:"price"`
+	Cuisine        string  `json:"cuisine"`
+	RestaurantName string  `json:"restaurant_name"`
+	Rating         float64 `json:"rating"`
+	ImageUrl       string  `json:"image_url"`
 }
 
 func (q *Queries) GetDishesByParams(ctx context.Context, arg GetDishesByParamsParams) ([]GetDishesByParamsRow, error) {
@@ -227,23 +271,13 @@ func (q *Queries) GetDishesByParams(ctx context.Context, arg GetDishesByParamsPa
 	for rows.Next() {
 		var i GetDishesByParamsRow
 		if err := rows.Scan(
-			&i.ID,
 			&i.RestaurantID,
-			&i.IsAvailable,
 			&i.Name,
-			&i.Description,
 			&i.Price,
-			&i.DietType,
 			&i.Cuisine,
-			&i.ImageUrl,
-			&i.ID_2,
-			&i.Name_2,
-			&i.Description_2,
-			&i.Address,
+			&i.RestaurantName,
 			&i.Rating,
-			&i.RestaurantType,
-			&i.NumOfReviews,
-			&i.ImageUrl_2,
+			&i.ImageUrl,
 		); err != nil {
 			return nil, err
 		}
@@ -327,8 +361,8 @@ type UpdateDishParams struct {
 	Name         string      `json:"name"`
 	Description  null.String `json:"description"`
 	Price        float64     `json:"price"`
-	Cuisine      null.String `json:"cuisine"`
-	ImageUrl     null.String `json:"image_url"`
+	Cuisine      string      `json:"cuisine"`
+	ImageUrl     string      `json:"image_url"`
 }
 
 func (q *Queries) UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error) {

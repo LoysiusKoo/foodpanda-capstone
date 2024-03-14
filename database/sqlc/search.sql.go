@@ -104,7 +104,7 @@ type SearchDishesRow struct {
 	DishName        string      `json:"dish_name"`
 	DishDescription null.String `json:"dish_description"`
 	DishPrice       float64     `json:"dish_price"`
-	DishImageurl    null.String `json:"dish_imageurl"`
+	DishImageurl    string      `json:"dish_imageurl"`
 	RestaurantName  string      `json:"restaurant_name"`
 	RestaurantID    int64       `json:"restaurant_id"`
 }

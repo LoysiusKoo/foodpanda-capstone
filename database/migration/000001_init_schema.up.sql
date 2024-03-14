@@ -3,7 +3,7 @@ CREATE TABLE "restaurants" (
   "name" varchar NOT NULL,
   "description" varchar,
   "address" varchar,
-  "rating" float,
+  "rating" float NOT NULL,
   "restaurant_type" varchar,
   "num_of_reviews" int,
   "image_url" varchar
@@ -16,9 +16,9 @@ CREATE TABLE "dishes" (
   "name" varchar NOT NULL,
   "description" varchar,
   "price" decimal(10, 2) NOT NULL,
-  "diet_type" varchar,
-  "cuisine" varchar,
-  "image_url" varchar
+  "diet_type" varchar NOT NULL,
+  "cuisine" varchar NOT NULL,
+  "image_url" varchar NOT NULL
 );
 
 CREATE TABLE "cuisine" (
@@ -29,9 +29,9 @@ CREATE TABLE "cuisine" (
 CREATE TABLE "playlists" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
-  "image" varchar,
-  "food_items" varchar,
-  "is_active" bool NOT NULL,
+  "image" varchar NOT NULL,
+  "food_items" varchar NOT NULL,
+  "is_active" bool NOT NULL DEFAULT true,
   "created_on" timestamptz NOT NULL DEFAULT (now())
 );
 

@@ -17,6 +17,7 @@ type Querier interface {
 	DeleteDish(ctx context.Context, id int64) error
 	DeletePlaylist(ctx context.Context, id int64) error
 	DeleteRestaurant(ctx context.Context, id int64) error
+	GetD(ctx context.Context, arg GetDParams) ([]Dish, error)
 	GetDish(ctx context.Context, id int64) (Dish, error)
 	GetDishes(ctx context.Context) ([]Dish, error)
 	GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullString) ([]Dish, error)

@@ -1,11 +1,19 @@
 -- name: GetDishesByParams :many
-SELECT * 
+SELECT d.restaurant_id, d.name, d.price, d.cuisine, r.name as restaurant_name, r.rating, d.image_url
 FROM dishes d JOIN restaurants r ON d.restaurant_id = r.id
-WHERE cuisine ILIKE '%'||$1||'%' 
-AND type ILIKE '%'||$2||'%' 
-AND price BETWEEN $3 AND $4
-AND rating >= $5
+WHERE d.cuisine ILIKE '%'||$1||'%'
+AND d.diet_type ILIKE '%'||$2||'%'
+AND d.price BETWEEN $3 AND $4
+AND r.rating >= $5
 ORDER BY r.id;
+
+-- name: GetD :many
+SELECT *
+FROM dishes
+WHERE cuisine = $1 
+AND diet_type = $2
+AND price BETWEEN $3 AND $4
+ORDER BY id;
 
 -- name: CreateDish :one
 INSERT INTO dishes (

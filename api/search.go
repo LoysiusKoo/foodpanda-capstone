@@ -75,7 +75,7 @@ func (server *Server) maptoModelSearchDish(searchDishesRow []db.SearchDishesRow)
 		searchDish.Name = searchDishRow.DishName
 		searchDish.Description = searchDishRow.DishDescription.String
 		searchDish.Price = searchDishRow.DishPrice
-		searchDish.ImageURL = searchDishRow.DishImageurl.String
+		searchDish.ImageURL = searchDishRow.DishImageurl
 		searchDish.RestaurantName = searchDishRow.RestaurantName
 		searchDish.RestaurantID = searchDishRow.RestaurantID
 

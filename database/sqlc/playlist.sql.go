@@ -7,8 +7,6 @@ package db
 
 import (
 	"context"
-
-	null "gopkg.in/guregu/null.v4"
 )
 
 const createPlaylist = `-- name: CreatePlaylist :one
@@ -25,10 +23,10 @@ RETURNING id, name, image, food_items, is_active, created_on
 `
 
 type CreatePlaylistParams struct {
-	Name      string      `json:"name"`
-	Image     null.String `json:"image"`
-	FoodItems null.String `json:"food_items"`
-	IsActive  bool        `json:"is_active"`
+	Name      string `json:"name"`
+	Image     string `json:"image"`
+	FoodItems string `json:"food_items"`
+	IsActive  bool   `json:"is_active"`
 }
 
 func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error) {
@@ -134,11 +132,11 @@ RETURNING id, name, image, food_items, is_active, created_on
 `
 
 type UpdatePlaylistParams struct {
-	ID        int64       `json:"id"`
-	Name      string      `json:"name"`
-	Image     null.String `json:"image"`
-	FoodItems null.String `json:"food_items"`
-	IsActive  bool        `json:"is_active"`
+	ID        int64  `json:"id"`
+	Name      string `json:"name"`
+	Image     string `json:"image"`
+	FoodItems string `json:"food_items"`
+	IsActive  bool   `json:"is_active"`
 }
 
 func (q *Queries) UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error) {
