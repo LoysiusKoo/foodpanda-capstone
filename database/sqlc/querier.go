@@ -13,18 +13,34 @@ type Querier interface {
 	CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error)
 	CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error)
 	CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error)
+	CreateSearch(ctx context.Context, arg CreateSearchParams) (Search, error)
 	DeleteDish(ctx context.Context, id int64) error
 	DeletePlaylist(ctx context.Context, id int64) error
 	DeleteRestaurant(ctx context.Context, id int64) error
 	GetDish(ctx context.Context, id int64) (Dish, error)
 	GetDishes(ctx context.Context) ([]Dish, error)
 	GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullString) ([]Dish, error)
+	GetDishesByParams(ctx context.Context, arg GetDishesByParamsParams) ([]GetDishesByParamsRow, error)
 	GetPlaylist(ctx context.Context, id int64) (Playlist, error)
 	GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error)
 	GetRestaurants(ctx context.Context) ([]Restaurant, error)
+	GetSearch(ctx context.Context, id int64) (Search, error)
 	ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish, error)
 	ListPlaylists(ctx context.Context, arg ListPlaylistsParams) ([]Playlist, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
+	ListSearches(ctx context.Context, arg ListSearchesParams) ([]Search, error)
+	// -- name: UpdateSearch :one
+	// UPDATE searches
+	// SET
+	//   user_id = $2,
+	//   keyword = $3
+	// WHERE
+	//   id = $1
+	// RETURNING *;
+	// -- name: DeleteSearch :exec
+	// DELETE FROM searches
+	// WHERE id = $1;
+	SearchDishes(ctx context.Context, dollar_1 sql.NullString) ([]SearchDishesRow, error)
 	UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error)
 	UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error)
 	UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error)

@@ -25,8 +25,13 @@ func (server *Server) setupRouter() {
 	// add routes to router
 	router.GET("/restaurants", server.getRestaurants)
 	router.GET("/restaurants/:restaurantid", server.getRestaurantByID)
+
 	router.GET("/dishes", server.getDishes)
 	router.GET("/dishesbycuisine/:cuisinename", server.getDishesByCuisine)
+
+	router.POST("/createplaylist", server.createPlaylist)
+
+	router.GET("/search/:userid/:search", server.searchDishes)
 
 	server.router = router
 }

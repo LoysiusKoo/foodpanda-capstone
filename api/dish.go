@@ -2,7 +2,6 @@ package api
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -60,5 +59,4 @@ func (server *Server) getDishesByCuisine(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, dishes)
-	fmt.Println(req)
 }

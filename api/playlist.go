@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
+	db "github.com/loysiuskoo/foodpanda-capstone/database/sqlc"
 	"gopkg.in/guregu/null.v4"
 )
 
@@ -24,8 +25,8 @@ func (server *Server) createPlaylist(ctx *gin.Context) {
 
 	arg := db.CreatePlaylistParams{
 		Name:      req.Name,
-		ImageUrl:  null.NewString(req.ImageUrl, true),
-		Fooditems: req.FoodItems,
+		Image:     null.NewString(req.ImageUrl, true),
+		FoodItems: null.NewString(req.FoodItems, true),
 		IsActive:  req.IsActive,
 	}
 	playlist, err := server.store.CreatePlaylist(ctx, arg)

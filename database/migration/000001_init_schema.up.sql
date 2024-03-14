@@ -4,7 +4,8 @@ CREATE TABLE "restaurants" (
   "description" varchar,
   "address" varchar,
   "rating" float,
-  "cuisine" varchar,
+  "restaurant_type" varchar,
+  "num_of_reviews" int,
   "image_url" varchar
 );
 
@@ -15,6 +16,7 @@ CREATE TABLE "dishes" (
   "name" varchar NOT NULL,
   "description" varchar,
   "price" decimal(10, 2) NOT NULL,
+  "diet_type" varchar,
   "cuisine" varchar,
   "image_url" varchar
 );
@@ -31,6 +33,12 @@ CREATE TABLE "playlists" (
   "food_items" varchar,
   "is_active" bool NOT NULL,
   "created_on" timestamptz NOT NULL DEFAULT (now())
+);
+
+CREATE TABLE "searches" (
+  "id" bigserial PRIMARY KEY,
+  "user_id" bigserial NOT NULL,
+  "keyword" varchar
 );
 
 

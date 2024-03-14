@@ -4,11 +4,12 @@ INSERT INTO restaurants (
   description,
   address,
   rating,
-  cuisine,
+  restaurant_type,
+  num_of_reviews,
   image_url
 ) 
 VALUES (
-  $1, $2, $3, $4, $5, $6
+  $1, $2, $3, $4, $5, $6, $7
 )
 RETURNING *;
 
@@ -34,8 +35,9 @@ SET
   description = $3,
   address = $4,
   rating = $5,
-  cuisine = $6,
-  image_url = $7
+  restaurant_type = $6,
+  num_of_reviews = $7,
+  image_url = $8
 WHERE 
   id = $1
 RETURNING *;

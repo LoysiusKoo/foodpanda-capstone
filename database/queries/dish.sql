@@ -1,3 +1,12 @@
+-- name: GetDishesByParams :many
+SELECT * 
+FROM dishes d JOIN restaurants r ON d.restaurant_id = r.id
+WHERE cuisine ILIKE '%'||$1||'%' 
+AND type ILIKE '%'||$2||'%' 
+AND price BETWEEN $3 AND $4
+AND rating >= $5
+ORDER BY r.id;
+
 -- name: CreateDish :one
 INSERT INTO dishes (
   restaurant_id,

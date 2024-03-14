@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 
 	null "gopkg.in/guregu/null.v4"
 )
@@ -17,22 +18,24 @@ INSERT INTO restaurants (
   description,
   address,
   rating,
-  cuisine,
+  restaurant_type,
+  num_of_reviews,
   image_url
 ) 
 VALUES (
-  $1, $2, $3, $4, $5, $6
+  $1, $2, $3, $4, $5, $6, $7
 )
-RETURNING id, name, description, address, rating, cuisine, image_url
+RETURNING id, name, description, address, rating, restaurant_type, num_of_reviews, image_url
 `
 
 type CreateRestaurantParams struct {
-	Name        string      `json:"name"`
-	Description null.String `json:"description"`
-	Address     null.String `json:"address"`
-	Rating      null.Float  `json:"rating"`
-	Cuisine     null.String `json:"cuisine"`
-	ImageUrl    null.String `json:"image_url"`
+	Name           string        `json:"name"`
+	Description    null.String   `json:"description"`
+	Address        null.String   `json:"address"`
+	Rating         null.Float    `json:"rating"`
+	RestaurantType null.String   `json:"restaurant_type"`
+	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
+	ImageUrl       null.String   `json:"image_url"`
 }
 
 func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error) {
@@ -41,7 +44,8 @@ func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantPara
 		arg.Description,
 		arg.Address,
 		arg.Rating,
-		arg.Cuisine,
+		arg.RestaurantType,
+		arg.NumOfReviews,
 		arg.ImageUrl,
 	)
 	var i Restaurant
@@ -51,7 +55,8 @@ func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantPara
 		&i.Description,
 		&i.Address,
 		&i.Rating,
-		&i.Cuisine,
+		&i.RestaurantType,
+		&i.NumOfReviews,
 		&i.ImageUrl,
 	)
 	return i, err
@@ -68,7 +73,7 @@ func (q *Queries) DeleteRestaurant(ctx context.Context, id int64) error {
 }
 
 const getRestaurantByID = `-- name: GetRestaurantByID :one
-SELECT id, name, description, address, rating, cuisine, image_url FROM restaurants
+SELECT id, name, description, address, rating, restaurant_type, num_of_reviews, image_url FROM restaurants
 WHERE id = $1 LIMIT 1
 `
 
@@ -81,14 +86,15 @@ func (q *Queries) GetRestaurantByID(ctx context.Context, id int64) (Restaurant, 
 		&i.Description,
 		&i.Address,
 		&i.Rating,
-		&i.Cuisine,
+		&i.RestaurantType,
+		&i.NumOfReviews,
 		&i.ImageUrl,
 	)
 	return i, err
 }
 
 const getRestaurants = `-- name: GetRestaurants :many
-SELECT id, name, description, address, rating, cuisine, image_url FROM restaurants
+SELECT id, name, description, address, rating, restaurant_type, num_of_reviews, image_url FROM restaurants
 ORDER BY id
 `
 
@@ -107,7 +113,8 @@ func (q *Queries) GetRestaurants(ctx context.Context) ([]Restaurant, error) {
 			&i.Description,
 			&i.Address,
 			&i.Rating,
-			&i.Cuisine,
+			&i.RestaurantType,
+			&i.NumOfReviews,
 			&i.ImageUrl,
 		); err != nil {
 			return nil, err
@@ -124,7 +131,7 @@ func (q *Queries) GetRestaurants(ctx context.Context) ([]Restaurant, error) {
 }
 
 const listRestaurants = `-- name: ListRestaurants :many
-SELECT id, name, description, address, rating, cuisine, image_url FROM restaurants
+SELECT id, name, description, address, rating, restaurant_type, num_of_reviews, image_url FROM restaurants
 WHERE id = $1
 ORDER BY id
 LIMIT $2
@@ -152,7 +159,8 @@ func (q *Queries) ListRestaurants(ctx context.Context, arg ListRestaurantsParams
 			&i.Description,
 			&i.Address,
 			&i.Rating,
-			&i.Cuisine,
+			&i.RestaurantType,
+			&i.NumOfReviews,
 			&i.ImageUrl,
 		); err != nil {
 			return nil, err
@@ -175,21 +183,23 @@ SET
   description = $3,
   address = $4,
   rating = $5,
-  cuisine = $6,
-  image_url = $7
+  restaurant_type = $6,
+  num_of_reviews = $7,
+  image_url = $8
 WHERE 
   id = $1
-RETURNING id, name, description, address, rating, cuisine, image_url
+RETURNING id, name, description, address, rating, restaurant_type, num_of_reviews, image_url
 `
 
 type UpdateRestaurantParams struct {
-	ID          int64       `json:"id"`
-	Name        string      `json:"name"`
-	Description null.String `json:"description"`
-	Address     null.String `json:"address"`
-	Rating      null.Float  `json:"rating"`
-	Cuisine     null.String `json:"cuisine"`
-	ImageUrl    null.String `json:"image_url"`
+	ID             int64         `json:"id"`
+	Name           string        `json:"name"`
+	Description    null.String   `json:"description"`
+	Address        null.String   `json:"address"`
+	Rating         null.Float    `json:"rating"`
+	RestaurantType null.String   `json:"restaurant_type"`
+	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
+	ImageUrl       null.String   `json:"image_url"`
 }
 
 func (q *Queries) UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error) {
@@ -199,7 +209,8 @@ func (q *Queries) UpdateRestaurant(ctx context.Context, arg UpdateRestaurantPara
 		arg.Description,
 		arg.Address,
 		arg.Rating,
-		arg.Cuisine,
+		arg.RestaurantType,
+		arg.NumOfReviews,
 		arg.ImageUrl,
 	)
 	var i Restaurant
@@ -209,7 +220,8 @@ func (q *Queries) UpdateRestaurant(ctx context.Context, arg UpdateRestaurantPara
 		&i.Description,
 		&i.Address,
 		&i.Rating,
-		&i.Cuisine,
+		&i.RestaurantType,
+		&i.NumOfReviews,
 		&i.ImageUrl,
 	)
 	return i, err

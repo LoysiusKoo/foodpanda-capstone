@@ -26,7 +26,7 @@ INSERT INTO dishes (
 VALUES (
   $1, $2, $3, $4, $5, $6, $7
 )
-RETURNING id, restaurant_id, is_available, name, description, price, cuisine, image_url
+RETURNING id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url
 `
 
 type CreateDishParams struct {
@@ -57,6 +57,7 @@ func (q *Queries) CreateDish(ctx context.Context, arg CreateDishParams) (Dish, e
 		&i.Name,
 		&i.Description,
 		&i.Price,
+		&i.DietType,
 		&i.Cuisine,
 		&i.ImageUrl,
 	)
@@ -74,7 +75,7 @@ func (q *Queries) DeleteDish(ctx context.Context, id int64) error {
 }
 
 const getDish = `-- name: GetDish :one
-SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
+SELECT id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url FROM dishes
 WHERE id = $1 LIMIT 1
 `
 
@@ -88,6 +89,7 @@ func (q *Queries) GetDish(ctx context.Context, id int64) (Dish, error) {
 		&i.Name,
 		&i.Description,
 		&i.Price,
+		&i.DietType,
 		&i.Cuisine,
 		&i.ImageUrl,
 	)
@@ -95,7 +97,7 @@ func (q *Queries) GetDish(ctx context.Context, id int64) (Dish, error) {
 }
 
 const getDishes = `-- name: GetDishes :many
-SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
+SELECT id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url FROM dishes
 ORDER BY id
 `
 
@@ -115,6 +117,7 @@ func (q *Queries) GetDishes(ctx context.Context) ([]Dish, error) {
 			&i.Name,
 			&i.Description,
 			&i.Price,
+			&i.DietType,
 			&i.Cuisine,
 			&i.ImageUrl,
 		); err != nil {
@@ -132,7 +135,7 @@ func (q *Queries) GetDishes(ctx context.Context) ([]Dish, error) {
 }
 
 const getDishesByCuisine = `-- name: GetDishesByCuisine :many
-SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
+SELECT id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url FROM dishes
 WHERE cuisine ILIKE '%'||$1||'%'
 ORDER BY id
 `
@@ -153,6 +156,7 @@ func (q *Queries) GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullStrin
 			&i.Name,
 			&i.Description,
 			&i.Price,
+			&i.DietType,
 			&i.Cuisine,
 			&i.ImageUrl,
 		); err != nil {
@@ -169,8 +173,93 @@ func (q *Queries) GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullStrin
 	return items, nil
 }
 
+const getDishesByParams = `-- name: GetDishesByParams :many
+SELECT d.id, restaurant_id, is_available, d.name, d.description, price, diet_type, cuisine, d.image_url, r.id, r.name, r.description, address, rating, restaurant_type, num_of_reviews, r.image_url 
+FROM dishes d JOIN restaurants r ON d.restaurant_id = r.id
+WHERE cuisine ILIKE '%'||$1||'%' 
+AND type ILIKE '%'||$2||'%' 
+AND price BETWEEN $3 AND $4
+AND rating >= $5
+ORDER BY r.id
+`
+
+type GetDishesByParamsParams struct {
+	Column1 sql.NullString `json:"column_1"`
+	Column2 sql.NullString `json:"column_2"`
+	Price   float64        `json:"price"`
+	Price_2 float64        `json:"price_2"`
+	Rating  null.Float     `json:"rating"`
+}
+
+type GetDishesByParamsRow struct {
+	ID             int64         `json:"id"`
+	RestaurantID   int64         `json:"restaurant_id"`
+	IsAvailable    bool          `json:"is_available"`
+	Name           string        `json:"name"`
+	Description    null.String   `json:"description"`
+	Price          float64       `json:"price"`
+	DietType       null.String   `json:"diet_type"`
+	Cuisine        null.String   `json:"cuisine"`
+	ImageUrl       null.String   `json:"image_url"`
+	ID_2           int64         `json:"id_2"`
+	Name_2         string        `json:"name_2"`
+	Description_2  null.String   `json:"description_2"`
+	Address        null.String   `json:"address"`
+	Rating         null.Float    `json:"rating"`
+	RestaurantType null.String   `json:"restaurant_type"`
+	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
+	ImageUrl_2     null.String   `json:"image_url_2"`
+}
+
+func (q *Queries) GetDishesByParams(ctx context.Context, arg GetDishesByParamsParams) ([]GetDishesByParamsRow, error) {
+	rows, err := q.db.QueryContext(ctx, getDishesByParams,
+		arg.Column1,
+		arg.Column2,
+		arg.Price,
+		arg.Price_2,
+		arg.Rating,
+	)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetDishesByParamsRow{}
+	for rows.Next() {
+		var i GetDishesByParamsRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.RestaurantID,
+			&i.IsAvailable,
+			&i.Name,
+			&i.Description,
+			&i.Price,
+			&i.DietType,
+			&i.Cuisine,
+			&i.ImageUrl,
+			&i.ID_2,
+			&i.Name_2,
+			&i.Description_2,
+			&i.Address,
+			&i.Rating,
+			&i.RestaurantType,
+			&i.NumOfReviews,
+			&i.ImageUrl_2,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listDishes = `-- name: ListDishes :many
-SELECT id, restaurant_id, is_available, name, description, price, cuisine, image_url FROM dishes
+SELECT id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url FROM dishes
 WHERE id = $1
 ORDER BY id
 LIMIT $2
@@ -199,6 +288,7 @@ func (q *Queries) ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish,
 			&i.Name,
 			&i.Description,
 			&i.Price,
+			&i.DietType,
 			&i.Cuisine,
 			&i.ImageUrl,
 		); err != nil {
@@ -227,7 +317,7 @@ SET
   image_url = $8
 WHERE 
   id = $1
-RETURNING id, restaurant_id, is_available, name, description, price, cuisine, image_url
+RETURNING id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url
 `
 
 type UpdateDishParams struct {
@@ -260,6 +350,7 @@ func (q *Queries) UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, e
 		&i.Name,
 		&i.Description,
 		&i.Price,
+		&i.DietType,
 		&i.Cuisine,
 		&i.ImageUrl,
 	)
