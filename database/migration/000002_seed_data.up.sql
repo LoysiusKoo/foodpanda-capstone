@@ -53,9 +53,9 @@ VALUES
 
   -- Curry House
   (6, true, 'Chicken Curry', 'Spicy chicken curry with fragrant rice', 9.00, 'normal', 'indian', 'curry_image_url_1'),
-  (6, true, 'Vegetable Biryani', 'Flavorful biryani with mixed vegetables', 11.00, 'normal', 'indian', 'curry_image_url_2'),
-  (6, true, 'Butter Chicken', 'Creamy and flavorful butter chicken curry', 12.00, 'normal', 'indian', 'curry_image_url_3'),
-  (6, true, 'Paneer Tikka Masala', 'Paneer in a spicy tomato-based curry', 13.50, 'normal', 'indian', 'curry_image_url_4'),
+  (6, true, 'Vegetable Biryani', 'Flavorful biryani with mixed vegetables', 11.00, 'normal', 'indian', 'https://img.taste.com.au/_L7m5vxs/taste/2016/11/vegetable-biryani-102620-1.jpeg'),
+  (6, true, 'Butter Chicken', 'Creamy and flavorful butter chicken curry', 12.00, 'normal', 'indian', 'https://cravinghomecooked.com/wp-content/uploads/2020/06/butter-chicken-1.jpg'),
+  (6, true, 'Paneer Tikka Masala', 'Paneer in a spicy tomato-based curry', 13.50, 'normal', 'indian', 'https://healthynibblesandbits.com/wp-content/uploads/2019/07/Paneer-Tikka-Masala-5.jpg'),
 
   -- Thai Delights
   (7, true, 'Tom Yum Soup', 'Spicy and sour soup with shrimp', 8.50, 'normal', 'thai', 'thai_image_url_1'),
