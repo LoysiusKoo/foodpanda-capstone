@@ -14,11 +14,9 @@ RETURNING *;
 SELECT * FROM playlists
 WHERE id = $1 LIMIT 1;
 
--- name: ListPlaylists :many
+-- name: GetAllPlaylists :many
 SELECT * FROM playlists
-ORDER BY id
-LIMIT $1
-OFFSET $2;
+ORDER BY id;
 
 -- name: UpdatePlaylist :one
 UPDATE playlists

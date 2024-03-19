@@ -17,6 +17,7 @@ type Querier interface {
 	DeleteDish(ctx context.Context, id int64) error
 	DeletePlaylist(ctx context.Context, id int64) error
 	DeleteRestaurant(ctx context.Context, id int64) error
+	GetAllPlaylists(ctx context.Context) ([]Playlist, error)
 	GetD(ctx context.Context, arg GetDParams) ([]Dish, error)
 	GetDish(ctx context.Context, id int64) (Dish, error)
 	GetDishes(ctx context.Context) ([]Dish, error)
@@ -27,7 +28,6 @@ type Querier interface {
 	GetRestaurants(ctx context.Context) ([]Restaurant, error)
 	GetSearch(ctx context.Context, id int64) (Search, error)
 	ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish, error)
-	ListPlaylists(ctx context.Context, arg ListPlaylistsParams) ([]Playlist, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
 	ListSearches(ctx context.Context, arg ListSearchesParams) ([]Search, error)
 	// -- name: UpdateSearch :one

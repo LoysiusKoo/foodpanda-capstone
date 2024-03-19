@@ -58,39 +58,13 @@ func (q *Queries) DeletePlaylist(ctx context.Context, id int64) error {
 	return err
 }
 
-const getPlaylist = `-- name: GetPlaylist :one
-SELECT id, name, image, food_items, is_active, created_on FROM playlists
-WHERE id = $1 LIMIT 1
-`
-
-func (q *Queries) GetPlaylist(ctx context.Context, id int64) (Playlist, error) {
-	row := q.db.QueryRowContext(ctx, getPlaylist, id)
-	var i Playlist
-	err := row.Scan(
-		&i.ID,
-		&i.Name,
-		&i.Image,
-		&i.FoodItems,
-		&i.IsActive,
-		&i.CreatedOn,
-	)
-	return i, err
-}
-
-const listPlaylists = `-- name: ListPlaylists :many
+const getAllPlaylists = `-- name: GetAllPlaylists :many
 SELECT id, name, image, food_items, is_active, created_on FROM playlists
 ORDER BY id
-LIMIT $1
-OFFSET $2
 `
 
-type ListPlaylistsParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
-}
-
-func (q *Queries) ListPlaylists(ctx context.Context, arg ListPlaylistsParams) ([]Playlist, error) {
-	rows, err := q.db.QueryContext(ctx, listPlaylists, arg.Limit, arg.Offset)
+func (q *Queries) GetAllPlaylists(ctx context.Context) ([]Playlist, error) {
+	rows, err := q.db.QueryContext(ctx, getAllPlaylists)
 	if err != nil {
 		return nil, err
 	}
@@ -117,6 +91,25 @@ func (q *Queries) ListPlaylists(ctx context.Context, arg ListPlaylistsParams) ([
 		return nil, err
 	}
 	return items, nil
+}
+
+const getPlaylist = `-- name: GetPlaylist :one
+SELECT id, name, image, food_items, is_active, created_on FROM playlists
+WHERE id = $1 LIMIT 1
+`
+
+func (q *Queries) GetPlaylist(ctx context.Context, id int64) (Playlist, error) {
+	row := q.db.QueryRowContext(ctx, getPlaylist, id)
+	var i Playlist
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Image,
+		&i.FoodItems,
+		&i.IsActive,
+		&i.CreatedOn,
+	)
+	return i, err
 }
 
 const updatePlaylist = `-- name: UpdatePlaylist :one
