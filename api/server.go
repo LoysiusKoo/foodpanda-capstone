@@ -31,6 +31,8 @@ func (server *Server) setupRouter() {
 	router.GET("/getd/:cuisinename/:type/:smallnum/:bignum", server.getD)
 	router.GET("/getdishesbyparams/:cuisinename/:type/:smallnum/:bignum/:rating", server.getDishesByParams)
 
+	// router.GET("/playlist", server.getAllPlaylist)
+	// router.GET("/playlist", server.getPlaylist)
 	router.POST("/createplaylist", server.createPlaylist)
 	router.POST("/create/:cuisinename/:type/:smallnum/:bignum/:rating", server.createPlaylistWithParams)
 

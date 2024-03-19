@@ -115,3 +115,30 @@ func (server *Server) createPlaylistWithParams(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, playlist)
 
 }
+
+// type getPlaylistRequest struct {
+// 	PlaylistId int `uri:"id"`
+// }
+
+// func (server *Server) getPlaylist(ctx *gin.Context) {
+// 	var req getPlaylistRequest
+// 	if err := ctx.ShouldBindUri(&req); err != nil {
+// 		ctx.JSON(http.StatusBadRequest, errResponse(err))
+// 		return
+// 	}
+
+// 	keyword := {Id: req.PlaylistId}
+
+// 	playlist, err := server.store.GetPlaylist(ctx, keyword)
+// 	if err != nil {
+// 		if err == sql.ErrNoRows {
+// 			ctx.JSON(http.StatusNotFound, errResponse(err))
+// 			return
+// 		}
+
+// 		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+// 		return
+// 	}
+
+// 	ctx.JSON(http.StatusOK, playlist)
+// }

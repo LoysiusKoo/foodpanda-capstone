@@ -115,6 +115,10 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 		return
 	}
 
+	if req.Cuisine == "Anything" {
+		req.Cuisine = ""
+	}
+
 	keyword := db.GetDishesByParamsParams{
 		Column1: sql.NullString{
 			String: strings.ToLower(req.Cuisine),
