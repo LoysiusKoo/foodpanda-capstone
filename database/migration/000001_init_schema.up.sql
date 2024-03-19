@@ -35,6 +35,15 @@ CREATE TABLE "playlists" (
   "created_on" timestamptz NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "playlist_dishes" (
+  "id" bigserial PRIMARY KEY,
+  "playlist_id" bigserial NOT NULL,
+  "dish_id" bigserial NOT NULL,
+  "date_to_be_delivered" timestamptz NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "added_at" timestamptz NOT NULL DEFAULT (now())
+);
+
 CREATE TABLE "searches" (
   "id" bigserial PRIMARY KEY,
   "user_id" bigserial NOT NULL,

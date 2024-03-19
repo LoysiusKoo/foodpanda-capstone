@@ -40,6 +40,15 @@ type Playlist struct {
 	CreatedOn time.Time `json:"created_on"`
 }
 
+type PlaylistDish struct {
+	ID                int64     `json:"id"`
+	PlaylistID        int64     `json:"playlist_id"`
+	DishID            int64     `json:"dish_id"`
+	DateToBeDelivered time.Time `json:"date_to_be_delivered"`
+	CreatedAt         time.Time `json:"created_at"`
+	AddedAt           time.Time `json:"added_at"`
+}
+
 // Stores restaurants
 type Restaurant struct {
 	ID             int64         `json:"id"`

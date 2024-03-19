@@ -2,10 +2,12 @@ package api
 
 import (
 	"database/sql"
+	"encoding/json"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 
 	db "github.com/loysiuskoo/foodpanda-capstone/database/sqlc"
 )
@@ -132,6 +134,31 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 			return
 		}
 
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+
+	//map dishes to string
+	dishesString, _ := json.Marshal(dishes)
+	str := string(dishesString)
+
+	//create playlist
+	arg := db.CreatePlaylistParams{
+		Name:      dishes[0].Name,
+		Image:     dishes[0].ImageUrl,
+		FoodItems: str,
+		IsActive:  true,
+	}
+
+	_, err = server.store.CreatePlaylist(ctx, arg)
+	if err != nil {
+		if pqErr, ok := err.(*pq.Error); ok {
+			switch pqErr.Code.Name() {
+			case "foreign_key_violation", "unique_violation":
+				ctx.JSON(http.StatusForbidden, errResponse(err))
+				return
+			}
+		}
 		ctx.JSON(http.StatusInternalServerError, errResponse(err))
 		return
 	}

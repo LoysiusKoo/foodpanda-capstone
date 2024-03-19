@@ -14,7 +14,7 @@ import (
 
 type createPlaylistRequest struct {
 	Name      string `json:"name" binding:"required"`
-	ImageUrl  string `json:"image"`
+	Image     string `json:"image"`
 	FoodItems string `json:"food_items"`
 	IsActive  bool   `json:"is_active"`
 }
@@ -28,7 +28,7 @@ func (server *Server) createPlaylist(ctx *gin.Context) {
 
 	arg := db.CreatePlaylistParams{
 		Name:      req.Name,
-		Image:     req.ImageUrl,
+		Image:     req.Image,
 		FoodItems: req.FoodItems,
 		IsActive:  req.IsActive,
 	}

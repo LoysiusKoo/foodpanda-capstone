@@ -228,7 +228,7 @@ func (q *Queries) GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullStrin
 }
 
 const getDishesByParams = `-- name: GetDishesByParams :many
-SELECT d.restaurant_id, d.name, d.price, d.cuisine, r.name as restaurant_name, r.rating, d.image_url
+SELECT d.id, d.restaurant_id, d.name, d.price, d.cuisine, r.name as restaurant_name, r.rating, d.image_url
 FROM dishes d JOIN restaurants r ON d.restaurant_id = r.id
 WHERE d.cuisine ILIKE '%'||$1||'%'
 AND d.diet_type ILIKE '%'||$2||'%'
@@ -246,6 +246,7 @@ type GetDishesByParamsParams struct {
 }
 
 type GetDishesByParamsRow struct {
+	ID             int64   `json:"id"`
 	RestaurantID   int64   `json:"restaurant_id"`
 	Name           string  `json:"name"`
 	Price          float64 `json:"price"`
@@ -271,6 +272,7 @@ func (q *Queries) GetDishesByParams(ctx context.Context, arg GetDishesByParamsPa
 	for rows.Next() {
 		var i GetDishesByParamsRow
 		if err := rows.Scan(
+			&i.ID,
 			&i.RestaurantID,
 			&i.Name,
 			&i.Price,
