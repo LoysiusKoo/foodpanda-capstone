@@ -26,7 +26,7 @@ type Querier interface {
 	GetDishesByParams(ctx context.Context, arg GetDishesByParamsParams) ([]GetDishesByParamsRow, error)
 	GetFoodItemsFromPlaylists(ctx context.Context, id int64) ([]string, error)
 	GetPlaylist(ctx context.Context, id int64) (Playlist, error)
-	GetPlaylistDishes(ctx context.Context, id int64) ([]GetPlaylistDishesRow, error)
+	GetPlaylistDishes(ctx context.Context, playlistID int64) ([]GetPlaylistDishesRow, error)
 	GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error)
 	GetRestaurants(ctx context.Context) ([]Restaurant, error)
 	GetSearch(ctx context.Context, id int64) (Search, error)
