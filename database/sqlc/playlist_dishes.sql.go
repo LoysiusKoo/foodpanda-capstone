@@ -7,9 +7,6 @@ package db
 
 import (
 	"context"
-	"time"
-
-	null "gopkg.in/guregu/null.v4"
 )
 
 const createPlaylistDish = `-- name: CreatePlaylistDish :one
@@ -45,28 +42,21 @@ func (q *Queries) CreatePlaylistDish(ctx context.Context, arg CreatePlaylistDish
 }
 
 const getPlaylistDishes = `-- name: GetPlaylistDishes :many
-SELECT d.id, restaurant_id, is_available, name, description, price, diet_type, cuisine, image_url, p.id, playlist_id, dish_id, date_to_be_delivered, created_at, added_at
+SELECT d.id, d.name, d.price, d.image_url, p.date_to_be_delivered, d.cuisine, d.diet_type, p.id as playlist_dish_id
 FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id
 WHERE p.id = $1
 ORDER BY d.id
 `
 
 type GetPlaylistDishesRow struct {
-	ID                int64       `json:"id"`
-	RestaurantID      int64       `json:"restaurant_id"`
-	IsAvailable       bool        `json:"is_available"`
-	Name              string      `json:"name"`
-	Description       null.String `json:"description"`
-	Price             float64     `json:"price"`
-	DietType          string      `json:"diet_type"`
-	Cuisine           string      `json:"cuisine"`
-	ImageUrl          string      `json:"image_url"`
-	ID_2              int64       `json:"id_2"`
-	PlaylistID        int64       `json:"playlist_id"`
-	DishID            int64       `json:"dish_id"`
-	DateToBeDelivered string      `json:"date_to_be_delivered"`
-	CreatedAt         time.Time   `json:"created_at"`
-	AddedAt           time.Time   `json:"added_at"`
+	ID                int64   `json:"id"`
+	Name              string  `json:"name"`
+	Price             float64 `json:"price"`
+	ImageUrl          string  `json:"image_url"`
+	DateToBeDelivered string  `json:"date_to_be_delivered"`
+	Cuisine           string  `json:"cuisine"`
+	DietType          string  `json:"diet_type"`
+	PlaylistDishID    int64   `json:"playlist_dish_id"`
 }
 
 func (q *Queries) GetPlaylistDishes(ctx context.Context, id int64) ([]GetPlaylistDishesRow, error) {
@@ -80,20 +70,13 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, id int64) ([]GetPlaylis
 		var i GetPlaylistDishesRow
 		if err := rows.Scan(
 			&i.ID,
-			&i.RestaurantID,
-			&i.IsAvailable,
 			&i.Name,
-			&i.Description,
 			&i.Price,
-			&i.DietType,
-			&i.Cuisine,
 			&i.ImageUrl,
-			&i.ID_2,
-			&i.PlaylistID,
-			&i.DishID,
 			&i.DateToBeDelivered,
-			&i.CreatedAt,
-			&i.AddedAt,
+			&i.Cuisine,
+			&i.DietType,
+			&i.PlaylistDishID,
 		); err != nil {
 			return nil, err
 		}
