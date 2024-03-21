@@ -18,6 +18,10 @@ WHERE id = $1 LIMIT 1;
 SELECT * FROM playlists
 ORDER BY id;
 
+-- name: GetFoodItemsFromPlaylists :many
+SELECT food_items FROM playlists
+WHERE id = $1 LIMIT 1;
+
 -- name: UpdatePlaylist :one
 UPDATE playlists
 SET 

@@ -30,7 +30,6 @@ func (server *Server) setupRouter() {
 	router.GET("/dishesbycuisine/:cuisinename", server.getDishesByCuisine)
 	router.GET("/getd/:cuisinename/:type/:smallnum/:bignum", server.getD)
 	router.GET("/dishes/:cuisinename/:type/:smallnum/:bignum/:rating", server.getDishesByParams)
-
 	router.GET("/playlists", server.getAllPlaylist)
 	router.GET("/playlist/:id", server.getPlaylist)
 

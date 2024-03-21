@@ -93,6 +93,34 @@ func (q *Queries) GetAllPlaylists(ctx context.Context) ([]Playlist, error) {
 	return items, nil
 }
 
+const getFoodItemsFromPlaylists = `-- name: GetFoodItemsFromPlaylists :many
+SELECT food_items FROM playlists
+WHERE id = $1 LIMIT 1
+`
+
+func (q *Queries) GetFoodItemsFromPlaylists(ctx context.Context, id int64) ([]string, error) {
+	rows, err := q.db.QueryContext(ctx, getFoodItemsFromPlaylists, id)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []string{}
+	for rows.Next() {
+		var food_items string
+		if err := rows.Scan(&food_items); err != nil {
+			return nil, err
+		}
+		items = append(items, food_items)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getPlaylist = `-- name: GetPlaylist :one
 SELECT id, name, image, food_items, is_active, created_on FROM playlists
 WHERE id = $1 LIMIT 1

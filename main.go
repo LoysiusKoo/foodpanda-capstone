@@ -4,10 +4,9 @@ import (
 	"database/sql"
 	"log"
 
+	_ "github.com/lib/pq"
 	"github.com/loysiuskoo/foodpanda-capstone/api"
 	db "github.com/loysiuskoo/foodpanda-capstone/database/sqlc"
-
-	_ "github.com/lib/pq"
 	"github.com/loysiuskoo/foodpanda-capstone/util"
 )
 

@@ -154,7 +154,7 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 		IsActive:  true,
 	}
 
-	_, err = server.store.CreatePlaylist(ctx, arg)
+	playlist, err := server.store.CreatePlaylist(ctx, arg)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			switch pqErr.Code.Name() {
@@ -167,5 +167,31 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, dishes)
+	//Create playlist_dishes
+	type createPlaylistDishRequest struct {
+		DateToBeDelivered []string `form:"date_to_be_delivered" json:"date_to_be_delivered"`
+	}
+
+	var date createPlaylistDishRequest
+
+	for i, dish := range dishes {
+		params := db.CreatePlaylistDishParams{
+			PlaylistID:        playlist.ID,
+			DishID:            dish.ID,
+			DateToBeDelivered: date.DateToBeDelivered[i],
+		}
+
+		_, err = server.store.CreatePlaylistDish(ctx, params)
+		if err != nil {
+			if pqErr, ok := err.(*pq.Error); ok {
+				switch pqErr.Code.Name() {
+				case "foreign_key_violation", "unique_violation":
+					ctx.JSON(http.StatusForbidden, errResponse(err))
+					return
+				}
+			}
+			ctx.JSON(http.StatusInternalServerError, errResponse(err))
+			return
+		}
+	}
 }

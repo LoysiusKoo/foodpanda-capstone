@@ -1,5 +1,5 @@
 -- name: GetDishesByParams :many
-SELECT d.id, d.restaurant_id, d.name, d.price, d.cuisine, r.name as restaurant_name, r.rating, d.image_url
+SELECT *
 FROM dishes d JOIN restaurants r ON d.restaurant_id = r.id
 WHERE d.cuisine ILIKE '%'||$1||'%'
 AND d.diet_type ILIKE '%'||$2||'%'

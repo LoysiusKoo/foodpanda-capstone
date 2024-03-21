@@ -12,6 +12,7 @@ import (
 type Querier interface {
 	CreateDish(ctx context.Context, arg CreateDishParams) (Dish, error)
 	CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error)
+	CreatePlaylistDish(ctx context.Context, arg CreatePlaylistDishParams) (PlaylistDish, error)
 	CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error)
 	CreateSearch(ctx context.Context, arg CreateSearchParams) (Search, error)
 	DeleteDish(ctx context.Context, id int64) error
@@ -23,6 +24,7 @@ type Querier interface {
 	GetDishes(ctx context.Context) ([]Dish, error)
 	GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullString) ([]Dish, error)
 	GetDishesByParams(ctx context.Context, arg GetDishesByParamsParams) ([]GetDishesByParamsRow, error)
+	GetFoodItemsFromPlaylists(ctx context.Context, id int64) ([]string, error)
 	GetPlaylist(ctx context.Context, id int64) (Playlist, error)
 	GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error)
 	GetRestaurants(ctx context.Context) ([]Restaurant, error)
