@@ -194,4 +194,18 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 			return
 		}
 	}
+
+	//return playlist dishes
+	playlistDishes, err := server.store.GetPlaylistDishes(ctx, playlist.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, playlistDishes)
 }

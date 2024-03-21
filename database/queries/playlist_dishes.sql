@@ -9,3 +9,10 @@ VALUES (
   $1, $2, $3
 )
 RETURNING *;
+
+
+-- name: GetPlaylistDishes :many
+SELECT *
+FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id
+WHERE p.id = $1
+ORDER BY d.id;
