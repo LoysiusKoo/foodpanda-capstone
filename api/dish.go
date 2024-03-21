@@ -154,7 +154,7 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 
 	//create playlist
 	arg := db.CreatePlaylistParams{
-		Name:      req.Type,
+		Name:      req.Cuisine,
 		Image:     dishes[0].ImageUrl,
 		FoodItems: str,
 		IsActive:  true,
