@@ -142,6 +142,12 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 		return
 	}
 
+	// for _, dishes := range dishes {
+	// 	if dishes.ImageURL == "placeholder_image_url" {
+	// 		dishes.ImageURL = "https://media.istockphoto.com/id/1195743934/vector/cute-panda-character-vector-design.jpg?s=612x612&w=0&k=20&c=J3ht-bKADmsXvF6gFIleRtfJ6NGhXnfIsrwlsUF8w80="
+	// 	}
+	// }
+
 	//map dishes to string
 	dishesString, _ := json.Marshal(dishes)
 	str := string(dishesString)
