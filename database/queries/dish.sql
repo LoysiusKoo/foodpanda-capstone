@@ -5,7 +5,8 @@ WHERE d.cuisine ILIKE '%'||$1||'%'
 AND d.diet_type ILIKE '%'||$2||'%'
 AND d.price BETWEEN $3 AND $4
 AND r.rating >= $5
-ORDER BY r.id;
+ORDER BY r.id
+LIMIT 10; 
 
 -- name: GetD :many
 SELECT *
