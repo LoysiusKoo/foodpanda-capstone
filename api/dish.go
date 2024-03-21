@@ -148,7 +148,7 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 
 	//create playlist
 	arg := db.CreatePlaylistParams{
-		Name:      dishes[0].Name,
+		Name:      req.Type,
 		Image:     dishes[0].ImageUrl,
 		FoodItems: str,
 		IsActive:  true,
@@ -168,17 +168,21 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 	}
 
 	//Create playlist_dishes
-	type createPlaylistDishRequest struct {
-		DateToBeDelivered []string `form:"date_to_be_delivered" json:"date_to_be_delivered"`
+	type createPlaylistDishRequest []struct {
+		DateToBeDelivered string `json:"date_to_be_delivered"`
 	}
 
 	var date createPlaylistDishRequest
+	if err := ctx.ShouldBindJSON(&date); err != nil {
+		ctx.JSON(http.StatusBadRequest, errResponse(err))
+		return
+	}
 
 	for i, dish := range dishes {
 		params := db.CreatePlaylistDishParams{
 			PlaylistID:        playlist.ID,
 			DishID:            dish.ID,
-			DateToBeDelivered: date.DateToBeDelivered[i],
+			DateToBeDelivered: date[i].DateToBeDelivered,
 		}
 
 		_, err = server.store.CreatePlaylistDish(ctx, params)
