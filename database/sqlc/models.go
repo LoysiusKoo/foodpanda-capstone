@@ -44,6 +44,7 @@ type PlaylistDish struct {
 	PlaylistID        int64     `json:"playlist_id"`
 	DishID            int64     `json:"dish_id"`
 	DateToBeDelivered string    `json:"date_to_be_delivered"`
+	ImageUrl          string    `json:"image_url"`
 	CreatedAt         time.Time `json:"created_at"`
 	AddedAt           time.Time `json:"added_at"`
 }

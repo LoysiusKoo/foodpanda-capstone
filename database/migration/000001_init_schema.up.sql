@@ -40,6 +40,7 @@ CREATE TABLE "playlist_dishes" (
   "playlist_id" bigserial NOT NULL,
   "dish_id" bigserial NOT NULL,
   "date_to_be_delivered" varchar NOT NULL,
+  "image_url" varchar NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
   "added_at" timestamptz NOT NULL DEFAULT (now())
 );

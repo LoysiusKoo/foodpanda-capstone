@@ -179,10 +179,16 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 	}
 
 	for i, dish := range dishes {
+
+		if dish.ImageUrl == "placeholder_image_url" {
+			dish.ImageUrl = "https://media.istockphoto.com/id/1195743934/vector/cute-panda-character-vector-design.jpg?s=612x612&w=0&k=20&c=J3ht-bKADmsXvF6gFIleRtfJ6NGhXnfIsrwlsUF8w80="
+		}
+
 		params := db.CreatePlaylistDishParams{
 			PlaylistID:        playlist.ID,
 			DishID:            dish.ID,
 			DateToBeDelivered: date[i].DateToBeDelivered,
+			ImageUrl:          dish.ImageUrl,
 		}
 
 		_, err = server.store.CreatePlaylistDish(ctx, params)
@@ -208,12 +214,6 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 
 		ctx.JSON(http.StatusInternalServerError, errResponse(err))
 		return
-	}
-
-	for _, dish := range playlistDishes {
-		if dish.ImageUrl == "placeholder_image_url" {
-			dish.ImageUrl = "https://media.istockphoto.com/id/1195743934/vector/cute-panda-character-vector-design.jpg?s=612x612&w=0&k=20&c=J3ht-bKADmsXvF6gFIleRtfJ6NGhXnfIsrwlsUF8w80="
-		}
 	}
 
 	ctx.JSON(http.StatusOK, playlistDishes)

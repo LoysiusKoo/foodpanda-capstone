@@ -13,28 +13,36 @@ const createPlaylistDish = `-- name: CreatePlaylistDish :one
 INSERT INTO playlist_dishes (
   playlist_id,
   dish_id,
-  date_to_be_delivered
+  date_to_be_delivered,
+  image_Url
 ) 
 VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4
 )
-RETURNING id, playlist_id, dish_id, date_to_be_delivered, created_at, added_at
+RETURNING id, playlist_id, dish_id, date_to_be_delivered, image_url, created_at, added_at
 `
 
 type CreatePlaylistDishParams struct {
 	PlaylistID        int64  `json:"playlist_id"`
 	DishID            int64  `json:"dish_id"`
 	DateToBeDelivered string `json:"date_to_be_delivered"`
+	ImageUrl          string `json:"image_url"`
 }
 
 func (q *Queries) CreatePlaylistDish(ctx context.Context, arg CreatePlaylistDishParams) (PlaylistDish, error) {
-	row := q.db.QueryRowContext(ctx, createPlaylistDish, arg.PlaylistID, arg.DishID, arg.DateToBeDelivered)
+	row := q.db.QueryRowContext(ctx, createPlaylistDish,
+		arg.PlaylistID,
+		arg.DishID,
+		arg.DateToBeDelivered,
+		arg.ImageUrl,
+	)
 	var i PlaylistDish
 	err := row.Scan(
 		&i.ID,
 		&i.PlaylistID,
 		&i.DishID,
 		&i.DateToBeDelivered,
+		&i.ImageUrl,
 		&i.CreatedAt,
 		&i.AddedAt,
 	)
@@ -42,7 +50,7 @@ func (q *Queries) CreatePlaylistDish(ctx context.Context, arg CreatePlaylistDish
 }
 
 const getPlaylistDishes = `-- name: GetPlaylistDishes :many
-SELECT d.id, d.name, d.price, d.image_url, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id as playlist_id, r.rating, r.num_of_reviews AS numberOfReviews
+SELECT d.id, d.name, d.price, p.image_url, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id, r.rating, r.num_of_reviews AS number_of_reviews
 FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id
 JOIN restaurants r ON d.restaurant_id = r.id
 WHERE p.playlist_id = $1
@@ -58,7 +66,7 @@ type GetPlaylistDishesRow struct {
 	DietType          string  `json:"diet_type"`
 	PlaylistID        int64   `json:"playlist_id"`
 	Rating            float64 `json:"rating"`
-	Numberofreviews   int32   `json:"numberofreviews"`
+	NumberOfReviews   int32   `json:"number_of_reviews"`
 }
 
 func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]GetPlaylistDishesRow, error) {
@@ -80,7 +88,7 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]Ge
 			&i.DietType,
 			&i.PlaylistID,
 			&i.Rating,
-			&i.Numberofreviews,
+			&i.NumberOfReviews,
 		); err != nil {
 			return nil, err
 		}
