@@ -108,7 +108,7 @@ type getDishesByParamsRequest struct {
 	Rating   float64 `uri:"rating"`
 }
 
-func (server *Server) getDishesByParams(ctx *gin.Context) {
+func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 	var req getDishesByParamsRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errResponse(err))
@@ -204,7 +204,6 @@ func (server *Server) getDishesByParams(ctx *gin.Context) {
 			return
 		}
 	}
-
 	//return playlist dishes
 	playlistDishes, err := server.store.GetPlaylistDishes(ctx, playlist.ID)
 	if err != nil {

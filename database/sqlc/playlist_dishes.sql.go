@@ -42,7 +42,7 @@ func (q *Queries) CreatePlaylistDish(ctx context.Context, arg CreatePlaylistDish
 }
 
 const getPlaylistDishes = `-- name: GetPlaylistDishes :many
-SELECT d.id, d.name, d.price, d.image_url, p.date_to_be_delivered, d.cuisine, d.diet_type, p.id as playlist_dish_id
+SELECT d.id, d.name, d.price, d.image_url, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id as playlist_id
 FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id
 WHERE p.playlist_id = $1
 `
@@ -55,7 +55,7 @@ type GetPlaylistDishesRow struct {
 	DateToBeDelivered string  `json:"date_to_be_delivered"`
 	Cuisine           string  `json:"cuisine"`
 	DietType          string  `json:"diet_type"`
-	PlaylistDishID    int64   `json:"playlist_dish_id"`
+	PlaylistID        int64   `json:"playlist_id"`
 }
 
 func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]GetPlaylistDishesRow, error) {
@@ -75,7 +75,7 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]Ge
 			&i.DateToBeDelivered,
 			&i.Cuisine,
 			&i.DietType,
-			&i.PlaylistDishID,
+			&i.PlaylistID,
 		); err != nil {
 			return nil, err
 		}
