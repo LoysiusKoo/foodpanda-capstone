@@ -247,23 +247,23 @@ type GetDishesByParamsParams struct {
 }
 
 type GetDishesByParamsRow struct {
-	ID             int64         `json:"id"`
-	RestaurantID   int64         `json:"restaurant_id"`
-	IsAvailable    bool          `json:"is_available"`
-	Name           string        `json:"name"`
-	Description    null.String   `json:"description"`
-	Price          float64       `json:"price"`
-	DietType       string        `json:"diet_type"`
-	Cuisine        string        `json:"cuisine"`
-	ImageUrl       string        `json:"image_url"`
-	ID_2           int64         `json:"id_2"`
-	Name_2         string        `json:"name_2"`
-	Description_2  null.String   `json:"description_2"`
-	Address        null.String   `json:"address"`
-	Rating         float64       `json:"rating"`
-	RestaurantType null.String   `json:"restaurant_type"`
-	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
-	ImageUrl_2     null.String   `json:"image_url_2"`
+	ID             int64       `json:"id"`
+	RestaurantID   int64       `json:"restaurant_id"`
+	IsAvailable    bool        `json:"is_available"`
+	Name           string      `json:"name"`
+	Description    null.String `json:"description"`
+	Price          float64     `json:"price"`
+	DietType       string      `json:"diet_type"`
+	Cuisine        string      `json:"cuisine"`
+	ImageUrl       string      `json:"image_url"`
+	ID_2           int64       `json:"id_2"`
+	Name_2         string      `json:"name_2"`
+	Description_2  null.String `json:"description_2"`
+	Address        null.String `json:"address"`
+	Rating         float64     `json:"rating"`
+	RestaurantType string      `json:"restaurant_type"`
+	NumOfReviews   int32       `json:"num_of_reviews"`
+	ImageUrl_2     null.String `json:"image_url_2"`
 }
 
 func (q *Queries) GetDishesByParams(ctx context.Context, arg GetDishesByParamsParams) ([]GetDishesByParamsRow, error) {

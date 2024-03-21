@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 
 	null "gopkg.in/guregu/null.v4"
 )
@@ -29,13 +28,13 @@ RETURNING id, name, description, address, rating, restaurant_type, num_of_review
 `
 
 type CreateRestaurantParams struct {
-	Name           string        `json:"name"`
-	Description    null.String   `json:"description"`
-	Address        null.String   `json:"address"`
-	Rating         float64       `json:"rating"`
-	RestaurantType null.String   `json:"restaurant_type"`
-	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
-	ImageUrl       null.String   `json:"image_url"`
+	Name           string      `json:"name"`
+	Description    null.String `json:"description"`
+	Address        null.String `json:"address"`
+	Rating         float64     `json:"rating"`
+	RestaurantType string      `json:"restaurant_type"`
+	NumOfReviews   int32       `json:"num_of_reviews"`
+	ImageUrl       null.String `json:"image_url"`
 }
 
 func (q *Queries) CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error) {
@@ -192,14 +191,14 @@ RETURNING id, name, description, address, rating, restaurant_type, num_of_review
 `
 
 type UpdateRestaurantParams struct {
-	ID             int64         `json:"id"`
-	Name           string        `json:"name"`
-	Description    null.String   `json:"description"`
-	Address        null.String   `json:"address"`
-	Rating         float64       `json:"rating"`
-	RestaurantType null.String   `json:"restaurant_type"`
-	NumOfReviews   sql.NullInt32 `json:"num_of_reviews"`
-	ImageUrl       null.String   `json:"image_url"`
+	ID             int64       `json:"id"`
+	Name           string      `json:"name"`
+	Description    null.String `json:"description"`
+	Address        null.String `json:"address"`
+	Rating         float64     `json:"rating"`
+	RestaurantType string      `json:"restaurant_type"`
+	NumOfReviews   int32       `json:"num_of_reviews"`
+	ImageUrl       null.String `json:"image_url"`
 }
 
 func (q *Queries) UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error) {

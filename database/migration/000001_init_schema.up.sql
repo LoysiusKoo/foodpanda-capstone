@@ -4,8 +4,8 @@ CREATE TABLE "restaurants" (
   "description" varchar,
   "address" varchar,
   "rating" float NOT NULL,
-  "restaurant_type" varchar,
-  "num_of_reviews" int,
+  "restaurant_type" varchar NOT NULL,
+  "num_of_reviews" int NOT NULL,
   "image_url" varchar
 );
 
