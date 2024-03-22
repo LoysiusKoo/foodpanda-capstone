@@ -146,6 +146,10 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 	dishesString, _ := json.Marshal(dishes)
 	str := string(dishesString)
 
+	if dishes[0].ImageUrl == "placeholder_image_url" {
+		dishes[0].ImageUrl = "https://sm.mashable.com/mashable_sea/photo/default/mm20220106-4-1_b67x.jpg"
+	}
+
 	//create playlist
 	arg := db.CreatePlaylistParams{
 		Name:      req.Cuisine,
