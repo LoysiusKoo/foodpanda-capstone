@@ -49,6 +49,28 @@ func (q *Queries) CreatePlaylistDish(ctx context.Context, arg CreatePlaylistDish
 	return i, err
 }
 
+const deletePlaylistDish = `-- name: DeletePlaylistDish :one
+DELETE FROM playlist_dishes
+WHERE id = $1
+
+RETURNING id, playlist_id, dish_id, date_to_be_delivered, image_url, created_at, added_at
+`
+
+func (q *Queries) DeletePlaylistDish(ctx context.Context, id int64) (PlaylistDish, error) {
+	row := q.db.QueryRowContext(ctx, deletePlaylistDish, id)
+	var i PlaylistDish
+	err := row.Scan(
+		&i.ID,
+		&i.PlaylistID,
+		&i.DishID,
+		&i.DateToBeDelivered,
+		&i.ImageUrl,
+		&i.CreatedAt,
+		&i.AddedAt,
+	)
+	return i, err
+}
+
 const getPlaylistDishes = `-- name: GetPlaylistDishes :many
 SELECT d.id, d.name, d.price, p.image_url, r.name, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id, r.rating, r.num_of_reviews AS number_of_reviews, l.name AS playlist_name
 FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id

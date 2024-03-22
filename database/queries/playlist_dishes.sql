@@ -19,3 +19,9 @@ JOIN restaurants r ON d.restaurant_id = r.id
 JOIN playlists l ON p.playlist_id = l.id 
 WHERE p.playlist_id = $1 AND l.is_active = true
 ORDER BY p.id;
+
+-- name: DeletePlaylistDish :one
+DELETE FROM playlist_dishes
+WHERE id = $1
+
+RETURNING *;
