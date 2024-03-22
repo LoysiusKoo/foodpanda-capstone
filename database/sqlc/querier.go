@@ -32,7 +32,7 @@ type Querier interface {
 	GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error)
 	GetRestaurants(ctx context.Context) ([]Restaurant, error)
 	GetSearch(ctx context.Context, id int64) (Search, error)
-	GetUpcomingDelivery(ctx context.Context, dateToBeDelivered string) (PlaylistDish, error)
+	GetUpcomingDelivery(ctx context.Context, dateToBeDelivered string) (GetUpcomingDeliveryRow, error)
 	ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
 	ListSearches(ctx context.Context, arg ListSearchesParams) ([]Search, error)

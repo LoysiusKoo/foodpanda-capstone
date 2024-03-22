@@ -75,3 +75,19 @@ func getEarliestDeliveryDate(deliveryDates []string) (time.Time, error) {
 
 	return earliestDate, nil
 }
+
+func (server *Server) getDelivery(ctx *gin.Context) {
+
+	deliveryDates, err := server.store.GetDeliveryDates(ctx)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, deliveryDates)
+
+}
