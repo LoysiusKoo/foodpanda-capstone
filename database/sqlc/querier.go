@@ -46,7 +46,7 @@ type Querier interface {
 	// WHERE id = $1;
 	SearchDishes(ctx context.Context, dollar_1 sql.NullString) ([]SearchDishesRow, error)
 	UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error)
-	UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error)
+	UpdateIsActive(ctx context.Context, arg UpdateIsActiveParams) (Playlist, error)
 	UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error)
 }
 

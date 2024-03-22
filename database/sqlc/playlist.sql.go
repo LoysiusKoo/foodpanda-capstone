@@ -140,34 +140,22 @@ func (q *Queries) GetPlaylist(ctx context.Context, id int64) (Playlist, error) {
 	return i, err
 }
 
-const updatePlaylist = `-- name: UpdatePlaylist :one
+const updateIsActive = `-- name: UpdateIsActive :one
 UPDATE playlists
 SET 
-  name = $2,
-  image = $3,
-  food_items = $4,
-  is_active = $5
+  is_active = $2
 WHERE 
   id = $1
 RETURNING id, name, image, food_items, is_active, created_on
 `
 
-type UpdatePlaylistParams struct {
-	ID        int64  `json:"id"`
-	Name      string `json:"name"`
-	Image     string `json:"image"`
-	FoodItems string `json:"food_items"`
-	IsActive  bool   `json:"is_active"`
+type UpdateIsActiveParams struct {
+	ID       int64 `json:"id"`
+	IsActive bool  `json:"is_active"`
 }
 
-func (q *Queries) UpdatePlaylist(ctx context.Context, arg UpdatePlaylistParams) (Playlist, error) {
-	row := q.db.QueryRowContext(ctx, updatePlaylist,
-		arg.ID,
-		arg.Name,
-		arg.Image,
-		arg.FoodItems,
-		arg.IsActive,
-	)
+func (q *Queries) UpdateIsActive(ctx context.Context, arg UpdateIsActiveParams) (Playlist, error) {
+	row := q.db.QueryRowContext(ctx, updateIsActive, arg.ID, arg.IsActive)
 	var i Playlist
 	err := row.Scan(
 		&i.ID,

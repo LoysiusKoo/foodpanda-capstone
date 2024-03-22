@@ -22,13 +22,10 @@ ORDER BY id;
 SELECT food_items FROM playlists
 WHERE id = $1 LIMIT 1;
 
--- name: UpdatePlaylist :one
+-- name: UpdateIsActive :one
 UPDATE playlists
 SET 
-  name = $2,
-  image = $3,
-  food_items = $4,
-  is_active = $5
+  is_active = $2
 WHERE 
   id = $1
 RETURNING *;

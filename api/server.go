@@ -33,6 +33,7 @@ func (server *Server) setupRouter() {
 
 	router.GET("/playlists", server.getAllPlaylist)
 	router.GET("/playlist/:id", server.getPlaylist)
+	router.PUT("/updateIsActive/:id/:is_active", server.updateIsActive)
 
 	router.POST("/createplaylist", server.createPlaylist)
 	router.POST("/create/:cuisinename/:type/:smallnum/:bignum/:rating", server.createPlaylistWithParams)
