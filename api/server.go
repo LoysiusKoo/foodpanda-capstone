@@ -33,6 +33,7 @@ func (server *Server) setupRouter() {
 
 	router.GET("/playlists", server.getAllPlaylist)
 	router.GET("/playlist/:id", server.getPlaylist)
+	router.GET("/upcomingdelivery", server.getUpcomingDelivery)
 	router.PUT("/updateisactive/:id/:is_active", server.updateIsActive)
 	router.DELETE("/playlistdish/:id", server.deletePlaylistDish)
 

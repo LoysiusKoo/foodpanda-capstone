@@ -21,6 +21,7 @@ type Querier interface {
 	DeleteRestaurant(ctx context.Context, id int64) error
 	GetAllPlaylists(ctx context.Context) ([]Playlist, error)
 	GetD(ctx context.Context, arg GetDParams) ([]Dish, error)
+	GetDeliveryDates(ctx context.Context) ([]string, error)
 	GetDish(ctx context.Context, id int64) (Dish, error)
 	GetDishes(ctx context.Context) ([]Dish, error)
 	GetDishesByCuisine(ctx context.Context, dollar_1 sql.NullString) ([]Dish, error)
@@ -31,6 +32,7 @@ type Querier interface {
 	GetRestaurantByID(ctx context.Context, id int64) (Restaurant, error)
 	GetRestaurants(ctx context.Context) ([]Restaurant, error)
 	GetSearch(ctx context.Context, id int64) (Search, error)
+	GetUpcomingDelivery(ctx context.Context, dateToBeDelivered string) (PlaylistDish, error)
 	ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
 	ListSearches(ctx context.Context, arg ListSearchesParams) ([]Search, error)
