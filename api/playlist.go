@@ -151,7 +151,7 @@ func (server *Server) getPlaylist(ctx *gin.Context) {
 		return
 	}
 
-	playlist, err := server.store.GetPlaylist(ctx, int64(req.ID))
+	playlist, err := server.store.GetPlaylistDishes(ctx, int64(req.ID))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errResponse(err))
