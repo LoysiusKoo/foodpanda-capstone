@@ -15,7 +15,6 @@ COPY app.env .
 COPY start.sh .
 COPY wait-for.sh .
 COPY db/migration ./migration
-COPY images/ ./images
 
 EXPOSE 8080
 CMD [ "/app/main" ]
