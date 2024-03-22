@@ -21,11 +21,6 @@ CREATE TABLE "dishes" (
   "image_url" varchar NOT NULL
 );
 
-CREATE TABLE "cuisine" (
-  "id" bigserial PRIMARY KEY,
-  "cuisine" varchar
-);
-
 CREATE TABLE "playlists" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
