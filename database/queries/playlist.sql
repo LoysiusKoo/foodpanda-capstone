@@ -16,6 +16,7 @@ WHERE id = $1 LIMIT 1;
 
 -- name: GetAllPlaylists :many
 SELECT * FROM playlists
+WHERE is_active = true
 ORDER BY id;
 
 -- name: GetFoodItemsFromPlaylists :many

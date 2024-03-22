@@ -60,6 +60,7 @@ func (q *Queries) DeletePlaylist(ctx context.Context, id int64) error {
 
 const getAllPlaylists = `-- name: GetAllPlaylists :many
 SELECT id, name, image, food_items, is_active, created_on FROM playlists
+WHERE is_active = true
 ORDER BY id
 `
 
