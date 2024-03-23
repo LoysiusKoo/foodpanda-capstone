@@ -10,12 +10,6 @@ import (
 	null "gopkg.in/guregu/null.v4"
 )
 
-// Stores cuisine
-type Cuisine struct {
-	ID      int64       `json:"id"`
-	Cuisine null.String `json:"cuisine"`
-}
-
 // Stores dishes
 type Dish struct {
 	ID           int64       `json:"id"`

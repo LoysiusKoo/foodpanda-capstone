@@ -51,8 +51,6 @@ COMMENT ON TABLE "restaurants" IS 'Stores restaurants';
 
 COMMENT ON TABLE "dishes" IS 'Stores dishes';
 
-COMMENT ON TABLE "cuisine" IS 'Stores cuisine';
-
 COMMENT ON TABLE "playlists" IS 'Stores user playlist';
 
 
