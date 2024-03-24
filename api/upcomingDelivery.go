@@ -14,7 +14,7 @@ func (server *Server) getUpcomingDelivery(ctx *gin.Context) {
 	deliveryDates, err := server.store.GetDeliveryDates(ctx)
 	if err == sql.ErrNoRows {
 		fmt.Println("No upcoming deliveries found:", err)
-		ctx.JSON(http.StatusNoContent, deliveryDates)
+		ctx.Status(http.StatusNoContent)
 		return
 	}
 
@@ -30,7 +30,8 @@ func (server *Server) getUpcomingDelivery(ctx *gin.Context) {
 	upcomingdelivery, err := server.store.GetUpcomingDelivery(ctx, earliestDateStr)
 	if err == sql.ErrNoRows {
 		fmt.Println("No upcoming deliveries found:", err)
-		ctx.JSON(http.StatusNoContent, upcomingdelivery)
+		ctx.Status(http.StatusNoContent)
+		return
 	}
 
 	ctx.JSON(http.StatusOK, upcomingdelivery)
