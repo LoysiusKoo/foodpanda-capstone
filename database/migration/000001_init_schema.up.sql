@@ -25,6 +25,8 @@ CREATE TABLE "playlists" (
   "id" bigserial PRIMARY KEY,
   "name" varchar NOT NULL,
   "image" varchar NOT NULL,
+  "numberofweeks" bigserial NOT NULL,
+  "dayofweek" varchar NOT NULL,
   "food_items" varchar NOT NULL,
   "is_active" bool NOT NULL DEFAULT true,
   "created_on" timestamptz NOT NULL DEFAULT (now())

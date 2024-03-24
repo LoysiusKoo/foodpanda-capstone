@@ -13,26 +13,32 @@ const createPlaylist = `-- name: CreatePlaylist :one
 INSERT INTO playlists (
   name,
   image,
+  numberofweeks,
+  dayofweek,
   food_items,
   is_active
 ) 
 VALUES (
-  $1, $2, $3, $4
+  $1, $2, $3, $4, $5, $6
 )
-RETURNING id, name, image, food_items, is_active, created_on
+RETURNING id, name, image, numberofweeks, dayofweek, food_items, is_active, created_on
 `
 
 type CreatePlaylistParams struct {
-	Name      string `json:"name"`
-	Image     string `json:"image"`
-	FoodItems string `json:"food_items"`
-	IsActive  bool   `json:"is_active"`
+	Name          string `json:"name"`
+	Image         string `json:"image"`
+	Numberofweeks int64  `json:"numberofweeks"`
+	Dayofweek     string `json:"dayofweek"`
+	FoodItems     string `json:"food_items"`
+	IsActive      bool   `json:"is_active"`
 }
 
 func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) (Playlist, error) {
 	row := q.db.QueryRowContext(ctx, createPlaylist,
 		arg.Name,
 		arg.Image,
+		arg.Numberofweeks,
+		arg.Dayofweek,
 		arg.FoodItems,
 		arg.IsActive,
 	)
@@ -41,6 +47,8 @@ func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) 
 		&i.ID,
 		&i.Name,
 		&i.Image,
+		&i.Numberofweeks,
+		&i.Dayofweek,
 		&i.FoodItems,
 		&i.IsActive,
 		&i.CreatedOn,
@@ -59,7 +67,7 @@ func (q *Queries) DeletePlaylist(ctx context.Context, id int64) error {
 }
 
 const getAllPlaylists = `-- name: GetAllPlaylists :many
-SELECT id, name, image, food_items, is_active, created_on FROM playlists
+SELECT id, name, image, numberofweeks, dayofweek, food_items, is_active, created_on FROM playlists
 ORDER BY id
 `
 
@@ -76,6 +84,8 @@ func (q *Queries) GetAllPlaylists(ctx context.Context) ([]Playlist, error) {
 			&i.ID,
 			&i.Name,
 			&i.Image,
+			&i.Numberofweeks,
+			&i.Dayofweek,
 			&i.FoodItems,
 			&i.IsActive,
 			&i.CreatedOn,
@@ -122,7 +132,7 @@ func (q *Queries) GetFoodItemsFromPlaylists(ctx context.Context, id int64) ([]st
 }
 
 const getPlaylist = `-- name: GetPlaylist :one
-SELECT id, name, image, food_items, is_active, created_on FROM playlists
+SELECT id, name, image, numberofweeks, dayofweek, food_items, is_active, created_on FROM playlists
 WHERE id = $1 LIMIT 1
 `
 
@@ -133,6 +143,8 @@ func (q *Queries) GetPlaylist(ctx context.Context, id int64) (Playlist, error) {
 		&i.ID,
 		&i.Name,
 		&i.Image,
+		&i.Numberofweeks,
+		&i.Dayofweek,
 		&i.FoodItems,
 		&i.IsActive,
 		&i.CreatedOn,
@@ -146,7 +158,7 @@ SET
   is_active = $2
 WHERE 
   id = $1
-RETURNING id, name, image, food_items, is_active, created_on
+RETURNING id, name, image, numberofweeks, dayofweek, food_items, is_active, created_on
 `
 
 type UpdateIsActiveParams struct {
@@ -161,6 +173,8 @@ func (q *Queries) UpdateIsActive(ctx context.Context, arg UpdateIsActiveParams) 
 		&i.ID,
 		&i.Name,
 		&i.Image,
+		&i.Numberofweeks,
+		&i.Dayofweek,
 		&i.FoodItems,
 		&i.IsActive,
 		&i.CreatedOn,

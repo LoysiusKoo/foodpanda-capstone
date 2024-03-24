@@ -25,12 +25,14 @@ type Dish struct {
 
 // Stores user playlist
 type Playlist struct {
-	ID        int64     `json:"id"`
-	Name      string    `json:"name"`
-	Image     string    `json:"image"`
-	FoodItems string    `json:"food_items"`
-	IsActive  bool      `json:"is_active"`
-	CreatedOn time.Time `json:"created_on"`
+	ID            int64     `json:"id"`
+	Name          string    `json:"name"`
+	Image         string    `json:"image"`
+	Numberofweeks int64     `json:"numberofweeks"`
+	Dayofweek     string    `json:"dayofweek"`
+	FoodItems     string    `json:"food_items"`
+	IsActive      bool      `json:"is_active"`
+	CreatedOn     time.Time `json:"created_on"`
 }
 
 type PlaylistDish struct {

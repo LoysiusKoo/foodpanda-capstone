@@ -101,16 +101,32 @@ func (server *Server) getD(ctx *gin.Context) {
 }
 
 type getDishesByParamsRequest struct {
-	Cuisine  string  `uri:"cuisinename"`
-	Type     string  `uri:"type"`
-	SmallNum float64 `uri:"smallnum"`
-	BigNum   float64 `uri:"bignum"`
-	Rating   float64 `uri:"rating"`
+	Cuisine       string  `uri:"cuisinename"`
+	Type          string  `uri:"type"`
+	SmallNum      float64 `uri:"smallnum"`
+	BigNum        float64 `uri:"bignum"`
+	Rating        float64 `uri:"rating"`
+	Numberofweeks int64   `json:"numberofweeks"`
+	Dayofweek     string  `json:"dayofweek"`
+}
+
+type createPlaylistDishRequest struct {
+	Numberofweeks int64  `json:"numberofweeks"`
+	Dayofweek     string `json:"dayofweek"`
+	DeliveryDates []struct {
+		DateToBeDelivered string `json:"date_to_be_delivered"`
+	} `json:"delivery_dates"`
 }
 
 func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 	var req getDishesByParamsRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errResponse(err))
+		return
+	}
+
+	var date createPlaylistDishRequest
+	if err := ctx.ShouldBindJSON(&date); err != nil {
 		ctx.JSON(http.StatusBadRequest, errResponse(err))
 		return
 	}
@@ -156,10 +172,12 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 
 	//create playlist
 	arg := db.CreatePlaylistParams{
-		Name:      req.Cuisine,
-		Image:     dishes[0].ImageUrl,
-		FoodItems: str,
-		IsActive:  true,
+		Name:          req.Cuisine,
+		Image:         dishes[0].ImageUrl,
+		Numberofweeks: date.Numberofweeks,
+		Dayofweek:     date.Dayofweek,
+		FoodItems:     str,
+		IsActive:      true,
 	}
 
 	playlist, err := server.store.CreatePlaylist(ctx, arg)
@@ -175,17 +193,6 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 		return
 	}
 
-	//Create playlist_dishes
-	type createPlaylistDishRequest []struct {
-		DateToBeDelivered string `json:"date_to_be_delivered"`
-	}
-
-	var date createPlaylistDishRequest
-	if err := ctx.ShouldBindJSON(&date); err != nil {
-		ctx.JSON(http.StatusBadRequest, errResponse(err))
-		return
-	}
-
 	for i, dish := range dishes {
 
 		if dish.ImageUrl == "placeholder_image_url" {
@@ -195,7 +202,7 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 		params := db.CreatePlaylistDishParams{
 			PlaylistID:        playlist.ID,
 			DishID:            dish.ID,
-			DateToBeDelivered: date[i].DateToBeDelivered,
+			DateToBeDelivered: date.DeliveryDates[i].DateToBeDelivered,
 			ImageUrl:          dish.ImageUrl,
 		}
 
