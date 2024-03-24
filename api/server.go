@@ -39,7 +39,7 @@ func (server *Server) setupRouter() {
 	router.GET("/upcomingdelivery", server.getUpcomingDelivery)
 	router.PUT("/updateisactive/:id/:is_active", server.updateIsActive)
 	router.DELETE("/playlistdish/:id", server.deletePlaylistDish)
-	router.DELETE("/playlist/:id", server.deletePlaylist)
+	router.DELETE("/playlist/:id", server.deletePlaylist) //not implemented yet
 
 	server.router = router
 }
