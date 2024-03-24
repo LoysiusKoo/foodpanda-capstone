@@ -72,7 +72,7 @@ func (q *Queries) DeletePlaylistDish(ctx context.Context, id int64) (PlaylistDis
 }
 
 const getPlaylistDishes = `-- name: GetPlaylistDishes :many
-SELECT d.id, d.name, d.price, p.image_url, r.name, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id, r.rating, r.num_of_reviews AS number_of_reviews, l.name AS playlist_name, l.is_active, l.numberofweeks, l.dayofweek
+SELECT d.id AS dish_id, p.id AS playlist_dishesID, p.playlist_id, d.name, d.price, p.image_url, r.name, p.date_to_be_delivered, d.cuisine, d.diet_type, r.rating, r.num_of_reviews AS number_of_reviews, l.name AS playlist_name, l.is_active, l.numberofweeks, l.dayofweek
 FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id
 JOIN restaurants r ON d.restaurant_id = r.id
 JOIN playlists l ON p.playlist_id = l.id 
@@ -81,7 +81,9 @@ ORDER BY p.id
 `
 
 type GetPlaylistDishesRow struct {
-	ID                int64   `json:"id"`
+	DishID            int64   `json:"dish_id"`
+	PlaylistDishesid  int64   `json:"playlist_dishesid"`
+	PlaylistID        int64   `json:"playlist_id"`
 	Name              string  `json:"name"`
 	Price             float64 `json:"price"`
 	ImageUrl          string  `json:"image_url"`
@@ -89,7 +91,6 @@ type GetPlaylistDishesRow struct {
 	DateToBeDelivered string  `json:"date_to_be_delivered"`
 	Cuisine           string  `json:"cuisine"`
 	DietType          string  `json:"diet_type"`
-	PlaylistID        int64   `json:"playlist_id"`
 	Rating            float64 `json:"rating"`
 	NumberOfReviews   int32   `json:"number_of_reviews"`
 	PlaylistName      string  `json:"playlist_name"`
@@ -108,7 +109,9 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]Ge
 	for rows.Next() {
 		var i GetPlaylistDishesRow
 		if err := rows.Scan(
-			&i.ID,
+			&i.DishID,
+			&i.PlaylistDishesid,
+			&i.PlaylistID,
 			&i.Name,
 			&i.Price,
 			&i.ImageUrl,
@@ -116,7 +119,6 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]Ge
 			&i.DateToBeDelivered,
 			&i.Cuisine,
 			&i.DietType,
-			&i.PlaylistID,
 			&i.Rating,
 			&i.NumberOfReviews,
 			&i.PlaylistName,
