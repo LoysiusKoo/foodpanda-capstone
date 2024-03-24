@@ -37,18 +37,6 @@ type Querier interface {
 	ListDishes(ctx context.Context, arg ListDishesParams) ([]Dish, error)
 	ListRestaurants(ctx context.Context, arg ListRestaurantsParams) ([]Restaurant, error)
 	ListSearches(ctx context.Context, arg ListSearchesParams) ([]Search, error)
-	// -- name: UpdateSearch :one
-	// UPDATE searches
-	// SET
-	//   user_id = $2,
-	//   keyword = $3
-	// WHERE
-	//   id = $1
-	// RETURNING *;
-	// -- name: DeleteSearch :exec
-	// DELETE FROM searches
-	// WHERE id = $1;
-	SearchDishes(ctx context.Context, dollar_1 sql.NullString) ([]SearchDishesRow, error)
 	UpdateDeliveryDate(ctx context.Context, arg UpdateDeliveryDateParams) (PlaylistDish, error)
 	UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error)
 	UpdateIsActive(ctx context.Context, arg UpdateIsActiveParams) (Playlist, error)

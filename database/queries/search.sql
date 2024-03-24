@@ -19,20 +19,6 @@ ORDER BY id DESC
 LIMIT $2
 OFFSET $3;
 
--- -- name: UpdateSearch :one
--- UPDATE searches
--- SET 
---   user_id = $2,
---   keyword = $3
--- WHERE 
---   id = $1
--- RETURNING *;
-
--- -- name: DeleteSearch :exec
--- DELETE FROM searches
--- WHERE id = $1;
-
--- name: SearchDishes :many
 SELECT d.id AS dish_id,
        d.name AS dish_name,
        d.description AS dish_description,
