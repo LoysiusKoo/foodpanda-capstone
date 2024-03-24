@@ -25,3 +25,11 @@ DELETE FROM playlist_dishes
 WHERE id = $1
 
 RETURNING *;
+
+-- name: UpdateDeliveryDate :one
+UPDATE playlist_dishes
+SET 
+  date_to_be_delivered = $2
+WHERE 
+  id = $1
+RETURNING *;

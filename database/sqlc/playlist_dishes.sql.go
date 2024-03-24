@@ -138,3 +138,32 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]Ge
 	}
 	return items, nil
 }
+
+const updateDeliveryDate = `-- name: UpdateDeliveryDate :one
+UPDATE playlist_dishes
+SET 
+  date_to_be_delivered = $2
+WHERE 
+  id = $1
+RETURNING id, playlist_id, dish_id, date_to_be_delivered, image_url, created_at, added_at
+`
+
+type UpdateDeliveryDateParams struct {
+	ID                int64  `json:"id"`
+	DateToBeDelivered string `json:"date_to_be_delivered"`
+}
+
+func (q *Queries) UpdateDeliveryDate(ctx context.Context, arg UpdateDeliveryDateParams) (PlaylistDish, error) {
+	row := q.db.QueryRowContext(ctx, updateDeliveryDate, arg.ID, arg.DateToBeDelivered)
+	var i PlaylistDish
+	err := row.Scan(
+		&i.ID,
+		&i.PlaylistID,
+		&i.DishID,
+		&i.DateToBeDelivered,
+		&i.ImageUrl,
+		&i.CreatedAt,
+		&i.AddedAt,
+	)
+	return i, err
+}

@@ -48,6 +48,7 @@ type Querier interface {
 	// DELETE FROM searches
 	// WHERE id = $1;
 	SearchDishes(ctx context.Context, dollar_1 sql.NullString) ([]SearchDishesRow, error)
+	UpdateDeliveryDate(ctx context.Context, arg UpdateDeliveryDateParams) (PlaylistDish, error)
 	UpdateDish(ctx context.Context, arg UpdateDishParams) (Dish, error)
 	UpdateIsActive(ctx context.Context, arg UpdateIsActiveParams) (Playlist, error)
 	UpdateRestaurant(ctx context.Context, arg UpdateRestaurantParams) (Restaurant, error)
