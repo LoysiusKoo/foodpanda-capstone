@@ -21,7 +21,19 @@ func (server *Server) deletePlaylistDish(ctx *gin.Context) {
 	}
 
 	//Move dishes with later delivery dates up
-	playlistDishes, err := server.store.GetPlaylistDishes(ctx, int64(req.ID))
+
+	playlistID, err := server.store.GetPlaylistFromPlaylistDishID(ctx, int64(req.ID))
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+
+	playlistDishes, err := server.store.GetPlaylistDishes(ctx, int64(playlistID))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errResponse(err))
@@ -35,14 +47,14 @@ func (server *Server) deletePlaylistDish(ctx *gin.Context) {
 	lengthOfPlaylistDishes := len(playlistDishes)
 
 	for i, dish := range playlistDishes {
-		if dish.DishID != int64(req.ID) {
+		if dish.PlaylistDishesid != int64(req.ID) {
 			lengthOfPlaylistDishes--
 		}
-		if dish.DishID == int64(req.ID) {
-			for j := i; j < lengthOfPlaylistDishes-1; j++ {
+		if dish.PlaylistDishesid == int64(req.ID) {
+			for j := i; j < lengthOfPlaylistDishes+1; j++ {
 				arg := db.UpdateDeliveryDateParams{
-					ID:                dish.DishID,
-					DateToBeDelivered: playlistDishes[j].DateToBeDelivered,
+					ID:                playlistDishes[j].PlaylistDishesid,
+					DateToBeDelivered: playlistDishes[j+1].DateToBeDelivered,
 				}
 
 				_, err := server.store.UpdateDeliveryDate(ctx, arg)

@@ -24,6 +24,11 @@ ORDER BY id;
 SELECT food_items FROM playlists
 WHERE id = $1 LIMIT 1;
 
+-- name: GetPlaylistFromPlaylistDishID :one
+SELECT p.id
+FROM playlists p JOIN playlist_dishes d ON p.id = d.playlist_id
+WHERE d.id = $1 LIMIT 1;
+
 -- name: UpdateIsActive :one
 UPDATE playlists
 SET 

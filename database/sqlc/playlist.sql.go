@@ -152,6 +152,18 @@ func (q *Queries) GetPlaylist(ctx context.Context, id int64) (Playlist, error) {
 	return i, err
 }
 
+const getPlaylistFromPlaylistDishID = `-- name: GetPlaylistFromPlaylistDishID :one
+SELECT p.id
+FROM playlists p JOIN playlist_dishes d ON p.id = d.playlist_id
+WHERE d.id = $1 LIMIT 1
+`
+
+func (q *Queries) GetPlaylistFromPlaylistDishID(ctx context.Context, id int64) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getPlaylistFromPlaylistDishID, id)
+	err := row.Scan(&id)
+	return id, err
+}
+
 const updateIsActive = `-- name: UpdateIsActive :one
 UPDATE playlists
 SET 
