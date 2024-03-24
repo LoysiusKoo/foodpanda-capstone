@@ -174,8 +174,8 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 	arg := db.CreatePlaylistParams{
 		Name:          req.Cuisine,
 		Image:         dishes[0].ImageUrl,
-		Numberofweeks: date.Numberofweeks,
-		Dayofweek:     date.Dayofweek,
+		Numberofweeks: date[0].Numberofweeks,
+		Dayofweek:     date[0].Dayofweek,
 		FoodItems:     str,
 		IsActive:      true,
 	}
@@ -202,7 +202,7 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 		params := db.CreatePlaylistDishParams{
 			PlaylistID:        playlist.ID,
 			DishID:            dish.ID,
-			DateToBeDelivered: date.DeliveryDates[i].DateToBeDelivered,
+			DateToBeDelivered: date[0].DeliveryDates[i].DateToBeDelivered,
 			ImageUrl:          dish.ImageUrl,
 		}
 
