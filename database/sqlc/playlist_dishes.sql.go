@@ -72,7 +72,7 @@ func (q *Queries) DeletePlaylistDish(ctx context.Context, id int64) (PlaylistDis
 }
 
 const getPlaylistDishes = `-- name: GetPlaylistDishes :many
-SELECT d.id, d.name, d.price, p.image_url, r.name, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id, r.rating, r.num_of_reviews AS number_of_reviews, l.name AS playlist_name, l.is_active
+SELECT d.id, d.name, d.price, p.image_url, r.name, p.date_to_be_delivered, d.cuisine, d.diet_type, p.playlist_id, r.rating, r.num_of_reviews AS number_of_reviews, l.name AS playlist_name, l.is_active, l.numberofweeks, l.dayofweek
 FROM dishes d JOIN playlist_dishes p ON d.id = p.dish_id
 JOIN restaurants r ON d.restaurant_id = r.id
 JOIN playlists l ON p.playlist_id = l.id 
@@ -94,6 +94,8 @@ type GetPlaylistDishesRow struct {
 	NumberOfReviews   int32   `json:"number_of_reviews"`
 	PlaylistName      string  `json:"playlist_name"`
 	IsActive          bool    `json:"is_active"`
+	Numberofweeks     int64   `json:"numberofweeks"`
+	Dayofweek         string  `json:"dayofweek"`
 }
 
 func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]GetPlaylistDishesRow, error) {
@@ -119,6 +121,8 @@ func (q *Queries) GetPlaylistDishes(ctx context.Context, playlistID int64) ([]Ge
 			&i.NumberOfReviews,
 			&i.PlaylistName,
 			&i.IsActive,
+			&i.Numberofweeks,
+			&i.Dayofweek,
 		); err != nil {
 			return nil, err
 		}
