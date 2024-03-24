@@ -51,7 +51,7 @@ func (server *Server) deletePlaylistDish(ctx *gin.Context) {
 			lengthOfPlaylistDishes--
 		}
 		if dish.PlaylistDishesid == int64(req.ID) {
-			for j := i; j < lengthOfPlaylistDishes-1; j++ {
+			for j := i; j < lengthOfPlaylistDishes+1; j++ {
 				arg := db.UpdateDeliveryDateParams{
 					ID:                playlistDishes[j+1].PlaylistDishesid,
 					DateToBeDelivered: playlistDishes[j].DateToBeDelivered,
