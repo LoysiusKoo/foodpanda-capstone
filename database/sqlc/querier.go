@@ -16,7 +16,7 @@ type Querier interface {
 	CreateRestaurant(ctx context.Context, arg CreateRestaurantParams) (Restaurant, error)
 	CreateSearch(ctx context.Context, arg CreateSearchParams) (Search, error)
 	DeleteDish(ctx context.Context, id int64) error
-	DeletePlaylist(ctx context.Context, id int64) error
+	DeletePlaylist(ctx context.Context, id int64) (Playlist, error)
 	DeletePlaylistDish(ctx context.Context, id int64) (PlaylistDish, error)
 	DeleteRestaurant(ctx context.Context, id int64) error
 	GetAllPlaylists(ctx context.Context) ([]Playlist, error)

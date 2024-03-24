@@ -164,3 +164,63 @@ func (server *Server) getPlaylist(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, playlist)
 }
+
+type deletePlaylistRequest struct {
+	ID int `uri:"id"`
+}
+
+func (server *Server) deletePlaylist(ctx *gin.Context) {
+	var req deletePlaylistRequest
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errResponse(err))
+		return
+	}
+
+	//Delete all playlist dishes
+	playlistID, err := server.store.GetPlaylistFromPlaylistDishID(ctx, int64(req.ID))
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+
+	playlistDishes, err := server.store.GetPlaylistDishes(ctx, int64(playlistID))
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+
+	for _, dish := range playlistDishes {
+		_, err = server.store.DeletePlaylistDish(ctx, int64(dish.PlaylistDishesid))
+		if err != nil {
+			if err == sql.ErrNoRows {
+				ctx.JSON(http.StatusNotFound, errResponse(err))
+				return
+			}
+			ctx.JSON(http.StatusInternalServerError, errResponse(err))
+			return
+		}
+	}
+
+	//Delete playlist
+	deletedDish, err := server.store.DeletePlaylist(ctx, int64(req.ID))
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, deletedDish)
+}

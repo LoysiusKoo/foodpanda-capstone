@@ -37,6 +37,7 @@ WHERE
   id = $1
 RETURNING *;
 
--- name: DeletePlaylist :exec
+-- name: DeletePlaylist :one
 DELETE FROM playlists
-WHERE id = $1;
+WHERE id = $1 
+RETURNING *;

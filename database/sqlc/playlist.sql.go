@@ -56,14 +56,26 @@ func (q *Queries) CreatePlaylist(ctx context.Context, arg CreatePlaylistParams) 
 	return i, err
 }
 
-const deletePlaylist = `-- name: DeletePlaylist :exec
+const deletePlaylist = `-- name: DeletePlaylist :one
 DELETE FROM playlists
-WHERE id = $1
+WHERE id = $1 
+RETURNING id, name, image, numberofweeks, dayofweek, food_items, is_active, created_on
 `
 
-func (q *Queries) DeletePlaylist(ctx context.Context, id int64) error {
-	_, err := q.db.ExecContext(ctx, deletePlaylist, id)
-	return err
+func (q *Queries) DeletePlaylist(ctx context.Context, id int64) (Playlist, error) {
+	row := q.db.QueryRowContext(ctx, deletePlaylist, id)
+	var i Playlist
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Image,
+		&i.Numberofweeks,
+		&i.Dayofweek,
+		&i.FoodItems,
+		&i.IsActive,
+		&i.CreatedOn,
+	)
+	return i, err
 }
 
 const getAllPlaylists = `-- name: GetAllPlaylists :many
