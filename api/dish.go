@@ -110,7 +110,7 @@ type getDishesByParamsRequest struct {
 	Dayofweek     string  `json:"dayofweek"`
 }
 
-type createPlaylistDishRequest struct {
+type createPlaylistDishRequest []struct {
 	Numberofweeks int64  `json:"numberofweeks"`
 	Dayofweek     string `json:"dayofweek"`
 	DeliveryDates []struct {
