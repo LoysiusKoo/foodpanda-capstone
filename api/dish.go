@@ -167,7 +167,7 @@ func (server *Server) CreatePlaylistByParams(ctx *gin.Context) {
 	}
 
 	if req.Cuisine == "" {
-		req.Cuisine = "Anything"
+		req.Cuisine = "Various Cuisines"
 	}
 
 	//create playlist
