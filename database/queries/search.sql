@@ -19,6 +19,7 @@ ORDER BY id DESC
 LIMIT $2
 OFFSET $3;
 
+-- name: SearchDishes :many
 SELECT d.id AS dish_id,
        d.name AS dish_name,
        d.description AS dish_description,
