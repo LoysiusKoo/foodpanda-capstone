@@ -28,19 +28,18 @@ func (server *Server) setupRouter() {
 	router.GET("/dishes", server.getDishes)
 	router.GET("/dishesbycuisine/:cuisinename", server.getDishesByCuisine)
 	router.GET("/getd/:cuisinename/:type/:smallnum/:bignum", server.getD)
+	router.POST("/createplaylist", server.createPlaylist)
+	router.POST("/create/:cuisinename/:type/:smallnum/:bignum/:rating", server.createPlaylistWithParams)
+	router.GET("/search/:userid/:search", server.searchDishes)
 
+	//Used in FE
 	router.POST("/dishes/:cuisinename/:type/:smallnum/:bignum/:rating", server.CreatePlaylistByParams)
-
 	router.GET("/playlists", server.getAllPlaylist)
 	router.GET("/playlist/:id", server.getPlaylist)
 	router.GET("/upcomingdelivery", server.getUpcomingDelivery)
 	router.PUT("/updateisactive/:id/:is_active", server.updateIsActive)
 	router.DELETE("/playlistdish/:id", server.deletePlaylistDish)
 	router.DELETE("/playlist/:id", server.deletePlaylist)
-
-	router.POST("/createplaylist", server.createPlaylist)
-	router.POST("/create/:cuisinename/:type/:smallnum/:bignum/:rating", server.createPlaylistWithParams)
-	router.GET("/search/:userid/:search", server.searchDishes)
 
 	server.router = router
 }
