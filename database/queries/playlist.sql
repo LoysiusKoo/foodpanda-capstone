@@ -18,7 +18,7 @@ WHERE id = $1 LIMIT 1;
 
 -- name: GetAllPlaylists :many
 SELECT * FROM playlists
-ORDER BY id DESC;
+ORDER BY id;
 
 -- name: GetFoodItemsFromPlaylists :many
 SELECT food_items FROM playlists
